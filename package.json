@@ -24,11 +24,15 @@
     ]
   },
   "dependencies": {
+    "@iconify/react": "^5.0.2",
     "concurrently": "^9.1.0",
     "electron": "^33.2.0",
     "electron-builder": "^25.1.8",
     "react": "^18.3.1",
-    "react-dom": "^18.3.1"
+    "react-dom": "^18.3.1",
+    "react-router-dom": "^7.0.1",
+    "react-toastify": "^10.0.6",
+    "ssh2": "^1.16.0"
   },
   "devDependencies": {
     "@eslint/js": "^9.13.0",

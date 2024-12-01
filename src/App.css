@@ -1,42 +1,139 @@
+@font-face {
+  font-family: "Cascadia";
+  src: url("/fonts/Cascadia.ttf");
+}
+
+@font-face {
+  font-family: "GeistVF";
+  src: url("/fonts/GeistVF.woff");
+}
+
+body {
+  font-family: "GeistVF", sans-serif;
+}
+
 #root {
-  max-width: 1280px;
-  margin: 0 auto;
-  padding: 2rem;
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-box-orient: vertical;
+  -webkit-box-direction: normal;
+      -ms-flex-direction: column;
+          flex-direction: column;
+  width: 100%;
+  height: calc(100vh - 30px);
+  background-color: #1c1b1f;
+  margin-top: 30px;
+}
+
+.button {
+  width: -webkit-max-content;
+  width: -moz-max-content;
+  width: max-content;
+  padding: 7px 10px;
+  border-radius: 4px;
+  font-weight: 600;
+  font-family: "Cascadia", sans-serif;
   text-align: center;
+  cursor: pointer;
+  -webkit-user-select: none;
+     -moz-user-select: none;
+      -ms-user-select: none;
+          user-select: none;
+  -webkit-transition: all 0.2s ease;
+  transition: all 0.2s ease;
 }
 
-.logo {
-  height: 6em;
-  padding: 1.5em;
-  will-change: filter;
-  transition: filter 300ms;
-}
-.logo:hover {
-  filter: drop-shadow(0 0 2em #646cffaa);
-}
-.logo.react:hover {
-  filter: drop-shadow(0 0 2em #61dafbaa);
+.button.yellow {
+  background-color: #d1b632;
+  color: #000;
 }
 
-@keyframes logo-spin {
-  from {
-    transform: rotate(0deg);
-  }
-  to {
-    transform: rotate(360deg);
-  }
+.button.yellow:hover {
+  background-color: #f5db41;
 }
 
-@media (prefers-reduced-motion: no-preference) {
-  a:nth-of-type(2) .logo {
-    animation: logo-spin infinite 20s linear;
-  }
+.button.purple {
+  background-color: #5a5cc3;
+  color: #fff;
 }
 
-.card {
-  padding: 2em;
+.button.purple:hover {
+  background-color: #7274ca;
 }
 
-.read-the-docs {
-  color: #888;
+.button.red {
+  background-color: #bf3e3e;
+  color: #fff;
 }
+
+.button.red:hover {
+  background-color: #e96161;
+}
+
+.button.gray {
+  background-color: #333;
+  color: #fff;
+  border: 1px solid #555555;
+}
+
+.button.gray:hover {
+  background-color: #555;
+}
+
+.form-item {
+  width: 100%;
+}
+
+.form-item label {
+  font-size: 14px;
+  color: #e1d169;
+}
+
+.form-item input {
+  width: calc(100% - 24px);
+  padding: 8px 12px;
+  border-radius: 4px;
+  border: 1px solid #333;
+  background: #171619;
+  color: #fff;
+  font-size: 14px;
+}
+
+.form-item input:focus {
+  outline: none;
+  border: 1px solid #60592b;
+}
+
+.form-item input::-webkit-input-placeholder {
+  color: #666;
+}
+
+.form-item input:-ms-input-placeholder {
+  color: #666;
+}
+
+.form-item input::-ms-input-placeholder {
+  color: #666;
+}
+
+.form-item input::placeholder {
+  color: #666;
+}
+
+.form-item textarea {
+  width: calc(100% - 24px);
+  min-height: 120px;
+  padding: 8px 12px;
+  border-radius: 4px;
+  border: 1px solid #333;
+  background: #171619;
+  color: #fff;
+  font-size: 12px;
+}
+
+.form-item textarea:focus {
+  outline: none;
+  border-color: #60592b;
+}
+/*# sourceMappingURL=App.css.map */

@@ -1,0 +1,115 @@
+@font-face {
+  font-family: "Cascadia";
+  src: url("/fonts/Cascadia.ttf");
+}
+
+@font-face {
+  font-family: "GeistVF";
+  src: url("/fonts/GeistVF.woff");
+}
+
+body {
+  font-family: "GeistVF", sans-serif;
+}
+
+#root {
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+  height: calc(100vh - 30px);
+  background-color: #1c1b1f;
+  margin-top: 30px;
+}
+
+.button {
+  width: max-content;
+  padding: 7px 10px;
+  border-radius: 4px;
+  font-weight: 600;
+  font-family: "Cascadia", sans-serif;
+  text-align: center;
+  cursor: pointer;
+  user-select: none;
+  transition: all 0.2s ease;
+
+  &.yellow {
+    background-color: #d1b632;
+    color: #000;
+
+    &:hover {
+      background-color: #f5db41;
+    }
+  }
+
+  &.purple {
+    background-color: #5a5cc3;
+    color: #fff;
+
+    &:hover {
+      background-color: #7274ca;
+    }
+  }
+
+  &.red {
+    background-color: #bf3e3e;
+    color: #fff;
+
+    &:hover {
+      background-color: #e96161;
+    }
+  }
+
+  &.gray {
+    background-color: #333;
+    color: #fff;
+    border: 1px solid #555555;
+
+    &:hover {
+      background-color: #555;
+    }
+  }
+}
+
+.form-item {
+  width: 100%;
+
+  label {
+    font-size: 14px;
+    color: #e1d169;
+  }
+
+  input {
+    width: calc(100% - 24px);
+    padding: 8px 12px;
+    border-radius: 4px;
+    border: 1px solid #333;
+    background: #171619;
+    color: #fff;
+    font-size: 14px;
+
+    &:focus {
+      outline: none;
+      border: 1px solid #60592b;
+    }
+
+    &::placeholder {
+      color: #666;
+    }
+  }
+
+  textarea {
+    width: calc(100% - 24px);
+    min-height: 120px;
+    padding: 8px 12px;
+    border-radius: 4px;
+    border: 1px solid #333;
+    background: #171619;
+    color: #fff;
+    font-size: 12px;
+
+    &:focus {
+      outline: none;
+      border-color: #60592b;
+    }
+  }
+}
