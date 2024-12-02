@@ -6,17 +6,20 @@ import {
   setupSSHHandlers,
 } from "../handlers/index.js";
 
+let mainWindow = null;
+
 async function appLifecycle() {
   try {
     await app.whenReady();
 
+    mainWindow = createWindow();
+
     setupConnectionHandlers();
-    setupSSHHandlers();
-    createWindow();
+    setupSSHHandlers(mainWindow);
 
     app.on("activate", () => {
       if (BrowserWindow.getAllWindows().length === 0) {
-        createWindow();
+        mainWindow = createWindow();
       }
     });
   } catch (error) {

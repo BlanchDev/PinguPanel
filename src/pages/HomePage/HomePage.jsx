@@ -26,7 +26,15 @@ function HomePage() {
         />
       )}
       <h1>
-        Welcome to <span style={{ color: "#f5db41" }}>PinguPanel</span>
+        Welcome to{" "}
+        <span
+          style={{
+            color: "#f5db41",
+            textShadow: "0px 0px 20px #000",
+          }}
+        >
+          PinguPanel
+        </span>
       </h1>
       <div className='saved-connections column gap15'>
         <div className='saved-connections-header row aic jcsb'>
@@ -47,9 +55,17 @@ function HomePage() {
                   e.preventDefault();
                   setPassphraseMenu(connection);
                 }}
+                style={
+                  passphraseMenu.id === connection.id
+                    ? { backgroundColor: "#555555" }
+                    : {}
+                }
               >
-                <span className='name'>{connection.name}</span>
-                <span className='host'>{connection.host}</span>
+                <span className='name yellow-title'>{connection.name}</span>
+                <span className='host'>
+                  {connection.host}:{connection.port}
+                </span>
+                <span className='username'>{connection.username}</span>
               </NavLink>
               <div className='w100 row aife gap5'>
                 <button className='w100 button gray'>Edit</button>

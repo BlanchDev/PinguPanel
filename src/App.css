@@ -26,13 +26,20 @@ body {
   margin-top: 30px;
 }
 
+.yellow-title {
+  color: #f5db41;
+}
+
+.purple-title {
+  color: #6658ff;
+}
+
 .button {
   width: -webkit-max-content;
   width: -moz-max-content;
   width: max-content;
   padding: 7px 10px;
   border-radius: 4px;
-  font-weight: 600;
   font-family: "Cascadia", sans-serif;
   text-align: center;
   cursor: pointer;
@@ -44,41 +51,62 @@ body {
   transition: all 0.2s ease;
 }
 
+.button:disabled {
+  cursor: not-allowed;
+}
+
+.button:disabled:hover {
+  background-color: transparent;
+}
+
 .button.yellow {
-  background-color: #d1b632;
-  color: #000;
+  background-color: transparent;
+  color: #f5db41;
+  border: 1px solid #555;
 }
 
 .button.yellow:hover {
-  background-color: #f5db41;
+  background-color: #524810;
 }
 
 .button.purple {
-  background-color: #5a5cc3;
-  color: #fff;
+  background-color: transparent;
+  color: #837eff;
+  border: 1px solid #555;
 }
 
 .button.purple:hover {
-  background-color: #7274ca;
+  background-color: #201f41;
 }
 
 .button.red {
-  background-color: #bf3e3e;
-  color: #fff;
+  background-color: transparent;
+  color: #ff5555;
+  border: 1px solid #555;
 }
 
 .button.red:hover {
-  background-color: #e96161;
+  background-color: #491616;
+}
+
+.button.green {
+  background-color: transparent;
+  color: #66ed66;
+  border: 1px solid #555;
+}
+
+.button.green:hover {
+  background-color: #103e10;
 }
 
 .button.gray {
-  background-color: #333;
-  color: #fff;
-  border: 1px solid #555555;
+  background-color: transparent;
+  color: #d3d3d3;
+  border: 1px solid #555;
 }
 
 .button.gray:hover {
-  background-color: #555;
+  background-color: #2f3034;
 }
 
 .form-item {

@@ -2,20 +2,31 @@ import { toast } from "react-toastify";
 import "./PassphraseMenu.css";
 import PropTypes from "prop-types";
 import { useState } from "react";
+import { useNavigate } from "react-router-dom";
 
 function PassphraseMenu({ passphraseMenu, setPassphraseMenu }) {
   const [loading, setLoading] = useState(false);
+
+  const navigate = useNavigate();
 
   const handleEnterPassphrase = (e) => {
     e.preventDefault();
     const passphrase = e.target[0].value;
     const connectionData = { ...passphraseMenu, passphrase };
     setLoading(true);
-    window.Electron.ssh.connect(connectionData).then(() => {
-      setLoading(false);
-      setPassphraseMenu({});
-      toast.success("Connection successful");
-    });
+    window.Electron.ssh
+      .connectSSH(connectionData)
+      .then(() => {
+        setLoading(false);
+        setPassphraseMenu({});
+        toast.success("Connection successful");
+        navigate(`/dashboard/${connectionData.id}`);
+      })
+      .catch((error) => {
+        setLoading(false);
+        console.log(error);
+        toast.error(error.message);
+      });
   };
 
   return (
@@ -45,7 +56,7 @@ function PassphraseMenu({ passphraseMenu, setPassphraseMenu }) {
             required
             autoFocus
           />
-          <button className='button yellow' type='submit' disabled={loading}>
+          <button className='button green' type='submit' disabled={loading}>
             {loading ? "Connecting..." : "Connect"}
           </button>
         </form>

@@ -1,7 +1,10 @@
 {
   "name": "pingupanel",
   "private": true,
-  "version": "0.0.0",
+  "version": "0.0.1",
+  "author": "blanch.dev",
+  "description": "PinguPanel - VPS Server Management Tool",
+  "homepage": "https://pingupanel.com",
   "type": "module",
   "main": "electron/main.js",
   "scripts": {
@@ -9,25 +12,43 @@
     "dev:electron": "NODE_ENV=development bunx --bun electron .",
     "dev:all": "concurrently \"bun run dev:react\" \"bun run dev:electron\"",
     "build:react": "bunx --bun vite build",
-    "build:electron": "bunx --bun electron-builder",
+    "build:electron": "cross-env ELECTRON_BUILDER_ALLOW_UNRESOLVED_DEPENDENCIES=true electron-builder --win",
     "build:all": "bun run build:react && bun run build:electron"
   },
   "build": {
-    "appId": "com.pingupanel.id",
+    "appId": "com.blanch.pingupanel",
     "productName": "PinguPanel",
-    "directories": {
-      "output": "dist_electron"
-    },
     "files": [
       "dist/**/*",
       "electron/**/*"
-    ]
+    ],
+    "directories": {
+      "buildResources": "assets",
+      "output": "dist-electron/${version}"
+    },
+    "win": {
+      "target": [
+        {
+          "target": "portable"
+        },
+        {
+          "target": "nsis"
+        }
+      ],
+      "icon": "assets/icon.ico"
+    },
+    "nsis": {
+      "oneClick": false,
+      "allowToChangeInstallationDirectory": true,
+      "createDesktopShortcut": true
+    },
+    "asar": true,
+    "compression": "maximum",
+    "npmRebuild": false
   },
   "dependencies": {
     "@iconify/react": "^5.0.2",
     "concurrently": "^9.1.0",
-    "electron": "^33.2.0",
-    "electron-builder": "^25.1.8",
     "react": "^18.3.1",
     "react-dom": "^18.3.1",
     "react-router-dom": "^7.0.1",
@@ -39,6 +60,9 @@
     "@types/react": "^18.3.12",
     "@types/react-dom": "^18.3.1",
     "@vitejs/plugin-react": "^4.3.3",
+    "cross-env": "^7.0.3",
+    "electron": "^33.2.0",
+    "electron-builder": "^25.1.8",
     "eslint": "^9.13.0",
     "eslint-plugin-react": "^7.37.2",
     "eslint-plugin-react-hooks": "^5.0.0",
