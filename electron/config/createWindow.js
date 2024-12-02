@@ -9,6 +9,7 @@ function createWindow() {
     height: 720,
     minWidth: 1024,
     minHeight: 576,
+    icon: join(getPath(), "../assets/icon.ico"),
     webPreferences: {
       sandbox: true,
       nodeIntegration: false,

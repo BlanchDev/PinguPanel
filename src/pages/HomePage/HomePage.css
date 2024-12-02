@@ -23,19 +23,20 @@
   display: grid;
   -ms-grid-columns: (1fr)[3];
       grid-template-columns: repeat(3, 1fr);
+  gap: 10px;
 }
 
 .home-page .saved-connections .saved-connections-list .saved-connection {
   padding: 20px;
-  background-color: #333333;
-  border: 1px solid #555555;
+  background-color: #333;
+  border: 1px solid #555;
   border-radius: 8px;
   -webkit-transition: all 0.2s ease;
   transition: all 0.2s ease;
 }
 
 .home-page .saved-connections .saved-connections-list .saved-connection:hover {
-  background-color: #555555;
+  background-color: #555;
 }
 
 .home-page .saved-connections .saved-connections-list .saved-connection .name {
