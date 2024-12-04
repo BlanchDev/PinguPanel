@@ -1,50 +1,23 @@
-.passphrase-menu {
-  width: 100%;
-  height: 100%;
-  position: fixed;
-  top: 30px;
-  left: 0;
-  z-index: 1000;
-  background-color: rgba(0, 0, 0, 0.6);
-  backdrop-filter: blur(1px);
+@use "../../../variables.scss" as *;
 
-  .close-container {
-    position: absolute;
+.passphrase-menu-content {
+
+  .passphrase-menu-header {
     width: 100%;
-    height: 100%;
   }
 
-  .passphrase-menu-content {
-    position: relative;
-    z-index: 100;
+  .passphrase-menu-body {
     width: 100%;
-    max-width: 600px;
-    min-height: 200px;
-    background-color: #1c1b1f;
-    padding: 20px;
-    border-radius: 10px;
 
-    .passphrase-menu-header {
-      width: 100%;
+    input {
+      width: calc(100% - 30px);
+      color: rgba(0, 0, 0, 0);
+      user-select: none;
     }
 
-    .passphrase-menu-body {
-      width: 100%;
-
-      input {
-        width: calc(100% - 30px);
-        color: #171619;
-        user-select: none;
-
-        &:focus {
-          border-color: #69ce98;
-        }
-      }
-
-      ::selection {
-        background-color: #171619 !important;
-        color: #171619 !important;
-      }
+    ::selection {
+      background-color: rgba(0, 0, 0, 0) !important;
+      color: rgba(0, 0, 0, 0) !important;
     }
   }
 }

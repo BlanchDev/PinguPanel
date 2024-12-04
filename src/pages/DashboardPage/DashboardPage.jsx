@@ -1,31 +1,35 @@
-import { useEffect, useState } from "react";
-import { useParams, useNavigate } from "react-router-dom";
+import { useEffect } from "react";
+import { useNavigate } from "react-router-dom";
 import { toast } from "react-toastify";
-import "./DashboardPage.css";
+import "./DashboardPage.scss";
 import ConnectionInfo from "./components/ConnectionInfo/ConnectionInfo";
 import JsVersionControl from "./components/JsVersionControl/JsVersionControl";
-import WebServerControl from "./components/WebServerControl/WebServerControl";
+import WebApps from "./components/WebApps/WebApps";
+import { useConnection } from "./context/Context";
 
 function DashboardPage() {
-  const { id } = useParams();
   const navigate = useNavigate();
-  const [connection, setConnection] = useState(null);
+
+  const { myConn, myConnLoading } = useConnection();
 
   useEffect(() => {
-    window.Electron.connections.get().then((connections) => {
-      const conn = connections.find((c) => c.id === id);
-      if (conn) {
-        setConnection(conn);
-      } else {
-        toast.error("Bağlantı bulunamadı!");
-        navigate("/");
-      }
-    });
-  }, [id, navigate]);
+    if (!myConn) {
+      window.Electron.ssh
+        .disconnectSSH()
+        .then(() => {
+          toast.error("Connection not found!");
+          navigate("/");
+        })
+        .catch((error) => {
+          toast.error(`Connection not found: ${error.message}`);
+          navigate("/");
+        });
+    }
+  }, [navigate, myConn]);
 
-  if (!connection) {
+  if (!myConn || myConnLoading) {
     return (
-      <div className='dashboard-page column aic jcc'>
+      <div className='dashboard-page column aic jcc gap25'>
         <div className='loading-spinner' />
         <p>Loading...</p>
       </div>
@@ -36,10 +40,10 @@ function DashboardPage() {
     <div className='dashboard-page column gap20'>
       <div className='connection-info column gap10'>
         <div className='info-grid'>
-          <ConnectionInfo connection={connection} />
+          <ConnectionInfo />
           <JsVersionControl />
         </div>
-        <WebServerControl />
+        <WebApps />
       </div>
     </div>
   );

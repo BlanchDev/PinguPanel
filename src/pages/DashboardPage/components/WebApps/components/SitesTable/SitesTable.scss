@@ -1,13 +1,28 @@
+@use "../../../../../../variables.scss" as *;
+
 .web-apps-table {
   width: 100%;
   border-collapse: collapse;
-  border: 1px solid #555;
+  background-color: $dark-bg;
 
   th,
   td {
-    border: 1px solid #555;
+    border: 1px solid $darkblue;
     text-align: center;
     padding: 10px;
+  }
+
+  tr:has(td:hover) {
+    background-color: $gray-bg;
+    cursor: pointer;
+  }
+
+  tr:has(th) {
+    background-color: $yellow-bg;
+  }
+
+  th {
+    font-weight: bold;
   }
 
   td {
@@ -16,10 +31,10 @@
   }
 
   tr:nth-child(even) {
-    background-color: #333;
+    background-color: $dark2-bg;
   }
 
-  .ssl {
+  .sslStatus {
     &.no {
       color: #ff5353;
       font-weight: bold;
@@ -37,23 +52,6 @@
     &.stopped {
       color: #ff5353;
       font-weight: bold;
-    }
-  }
-
-  .open-button-container {
-    padding: 0px;
-
-    .open-button {
-      width: calc(100% - 20px);
-      padding: 10px;
-      background-color: #2a2a2a;
-      color: white;
-      border: none;
-      font-weight: bold;
-
-      &:hover {
-        background-color: #2f3034;
-      }
     }
   }
 }

@@ -1,5 +1,5 @@
 import { useNavigate } from "react-router-dom";
-import "./SaveNewConnectionPage.css";
+import "./SaveNewConnectionPage.scss";
 import { useState } from "react";
 import BreadCrumbs from "../../components/BreadCrumbs/BreadCrumbs";
 function SaveNewConnectionPage() {
@@ -17,7 +17,7 @@ function SaveNewConnectionPage() {
   const handleSubmit = async (e) => {
     e.preventDefault();
 
-    const isSaved = await window.Electron.connections.add(serverData);
+    const isSaved = await window.Electron.connections.addConnection(serverData);
 
     if (isSaved) {
       navigate("/");

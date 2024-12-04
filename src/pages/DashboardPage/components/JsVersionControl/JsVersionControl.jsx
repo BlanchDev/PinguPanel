@@ -33,12 +33,12 @@ function JsVersionControl() {
             pm2: pm2Result.output.trim(),
           });
         } else {
-          throw new Error("Versiyon bilgileri alınamadı");
+          throw new Error("Version control failed!");
         }
 
         setLoading(false);
       } catch (error) {
-        console.error("Version kontrol hatası:", error);
+        console.error("Version control failed:", error);
         setLoading(false);
       }
     };

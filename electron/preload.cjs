@@ -2,9 +2,12 @@ const { contextBridge, ipcRenderer } = require("electron");
 
 contextBridge.exposeInMainWorld("Electron", {
   connections: {
-    get: () => ipcRenderer.invoke("get-connections"),
-    add: (connection) => ipcRenderer.invoke("add-connection", connection),
-    delete: (id) => ipcRenderer.invoke("delete-connection", id),
+    getConnections: () => ipcRenderer.invoke("get-connections"),
+    addConnection: (connection) =>
+      ipcRenderer.invoke("add-connection", connection),
+    deleteConnection: (id) => ipcRenderer.invoke("delete-connection", id),
+    editConnection: (id, data) =>
+      ipcRenderer.invoke("edit-connection", id, data),
   },
   ssh: {
     // Mevcut metodlar

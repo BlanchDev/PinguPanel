@@ -1,5 +1,6 @@
 import { Client } from "ssh2";
 import { ipcMain } from "electron";
+import process from "process";
 
 let activeConnection = null;
 let activeStreams = new Map();
@@ -14,7 +15,7 @@ function handleStreamData(stream) {
       output += data.toString();
     });
 
-    stream.stderr.on("data", (data) => {
+    stream.stderr?.on("data", (data) => {
       console.log("Error:", data.toString());
       errorOutput += data.toString();
     });
@@ -24,6 +25,8 @@ function handleStreamData(stream) {
       resolve({
         success: true,
         output: output || errorOutput,
+        code,
+        signal,
       });
     });
 
@@ -34,16 +37,16 @@ function handleStreamData(stream) {
   });
 }
 
-function executeSSHCommand(command) {
-  return new Promise((resolve, reject) => {
-    if (!activeConnection) {
-      reject(new Error("SSH bağlantısı bulunamadı!"));
-      return;
-    }
+async function executeSSHCommand(command) {
+  if (!activeConnection) {
+    throw new Error("SSH bağlantısı bulunamadı!");
+  }
 
+  return new Promise((resolve, reject) => {
     activeConnection.exec(command, async (err, stream) => {
       if (err) {
-        reject(new Error(err.message));
+        console.error("Command execution error:", err);
+        reject(new Error(err.message)); // Changed to reject with an Error
         return;
       }
 
@@ -51,6 +54,7 @@ function executeSSHCommand(command) {
         const result = await handleStreamData(stream);
         resolve(result);
       } catch (error) {
+        console.error("Stream handling error:", error);
         reject(new Error(error.message));
       }
     });
@@ -58,62 +62,133 @@ function executeSSHCommand(command) {
 }
 
 function setupWebSocketStream(stream, mainWindow, streamId) {
+  if (!stream || !mainWindow || !streamId) {
+    throw new Error("Invalid WebSocket stream parameters");
+  }
+
   activeStreams.set(streamId, stream);
 
   stream.on("data", (data) => {
-    mainWindow.webContents.send(`ws-data-${streamId}`, data.toString());
+    try {
+      mainWindow.webContents.send(`ws-data-${streamId}`, data.toString());
+    } catch (error) {
+      console.error(`WebSocket data error (${streamId}):`, error);
+    }
   });
 
-  stream.stderr.on("data", (data) => {
-    mainWindow.webContents.send(`ws-error-${streamId}`, data.toString());
+  stream.stderr?.on("data", (data) => {
+    try {
+      mainWindow.webContents.send(`ws-error-${streamId}`, data.toString());
+    } catch (error) {
+      console.error(`WebSocket stderr error (${streamId}):`, error);
+    }
   });
 
   stream.on("close", () => {
-    mainWindow.webContents.send(`ws-close-${streamId}`);
-    activeStreams.delete(streamId);
+    try {
+      mainWindow.webContents.send(`ws-close-${streamId}`);
+      activeStreams.delete(streamId);
+    } catch (error) {
+      console.error(`WebSocket close error (${streamId}):`, error);
+    }
   });
 
   stream.on("error", (err) => {
-    mainWindow.webContents.send(`ws-error-${streamId}`, err.message);
+    try {
+      mainWindow.webContents.send(`ws-error-${streamId}`, err.message);
+    } catch (error) {
+      console.error(`WebSocket error handling error (${streamId}):`, error);
+    }
   });
 }
 
 export function setupSSHHandlers(mainWindow) {
-  // Mevcut handler'lar aynı kalıyor
+  if (!mainWindow) {
+    throw new Error("MainWindow is required for SSH handlers");
+  }
+
   ipcMain.handle("connect-ssh", async (_, connectionData) => {
     try {
+      if (
+        !connectionData?.host ||
+        !connectionData?.username ||
+        !connectionData?.privateKey
+      ) {
+        throw new Error("Invalid connection data");
+      }
+
       const conn = new Client();
 
       return new Promise((resolve, reject) => {
+        const timeout = setTimeout(() => {
+          reject(new Error("Connection timeout"));
+        }, 30000); // 30 saniye timeout
+
         conn.on("ready", () => {
+          clearTimeout(timeout);
           activeConnection = conn;
           resolve({ success: true, message: "Bağlantı başarılı" });
         });
 
         conn.on("error", (err) => {
+          clearTimeout(timeout);
+          console.error("SSH connection error:", err);
           reject(new Error(err.message));
         });
 
         const config = {
           host: connectionData.host,
-          port: connectionData.port,
+          port: connectionData.port || 22,
           username: connectionData.username,
           privateKey: connectionData.privateKey,
-          passphrase: connectionData.passphrase || undefined,
+          passphrase: connectionData.passphrase,
+          readyTimeout: 30_000,
+          keepaliveInterval: 10_000,
+          keepaliveCountMax: 3,
+          debug:
+            process.env.NODE_ENV === "development" ? console.log : undefined,
+          algorithms: {
+            kex: [
+              "ecdh-sha2-nistp256",
+              "ecdh-sha2-nistp384",
+              "ecdh-sha2-nistp521",
+              "diffie-hellman-group-exchange-sha256",
+              "diffie-hellman-group14-sha1",
+            ],
+            cipher: [
+              "aes128-ctr",
+              "aes192-ctr",
+              "aes256-ctr",
+              "aes128-gcm",
+              "aes256-gcm",
+            ],
+            serverHostKey: [
+              "ssh-rsa",
+              "ecdsa-sha2-nistp256",
+              "ecdsa-sha2-nistp384",
+              "ecdsa-sha2-nistp521",
+            ],
+            hmac: ["hmac-sha2-256", "hmac-sha2-512", "hmac-sha1"],
+          },
         };
 
         conn.connect(config);
       });
     } catch (error) {
+      console.error("SSH connection setup error:", error);
       return { success: false, message: error.message };
     }
   });
 
   ipcMain.handle("execute-command", async (_, command) => {
     try {
+      if (!command) {
+        throw new Error("Command is required");
+      }
       const result = await executeSSHCommand(command);
       return result;
     } catch (error) {
+      console.error("Command execution handler error:", error);
       return { success: false, message: error.message };
     }
   });
@@ -121,9 +196,13 @@ export function setupSSHHandlers(mainWindow) {
   ipcMain.handle("disconnect-ssh", async () => {
     try {
       if (activeConnection) {
-        // Tüm aktif streamleri kapat
-        for (const stream of activeStreams.values()) {
-          stream.end();
+        for (const [streamId, stream] of activeStreams.entries()) {
+          try {
+            stream.end();
+            activeStreams.delete(streamId);
+          } catch (error) {
+            console.error(`Error closing stream ${streamId}:`, error);
+          }
         }
         activeStreams.clear();
         activeConnection.end();
@@ -131,48 +210,71 @@ export function setupSSHHandlers(mainWindow) {
       }
       return { success: true, message: "Bağlantı kapatıldı" };
     } catch (error) {
+      console.error("Disconnect error:", error);
       return { success: false, message: error.message };
     }
   });
 
-  // WebSocket stream oluşturma handler'ı
   ipcMain.handle("create-ws-stream", async (_, { command, streamId }) => {
     try {
+      if (!command || !streamId) {
+        throw new Error("Command and streamId are required");
+      }
+
       if (!activeConnection) {
         throw new Error("SSH bağlantısı bulunamadı!");
       }
 
-      // Eğer aynı ID'li bir stream varsa kapat
       if (activeStreams.has(streamId)) {
-        activeStreams.get(streamId).end();
-        activeStreams.delete(streamId);
+        try {
+          activeStreams.get(streamId).end();
+          activeStreams.delete(streamId);
+        } catch (error) {
+          console.error(`Error closing existing stream ${streamId}:`, error);
+        }
       }
 
       return new Promise((resolve, reject) => {
         activeConnection.exec(command, (err, stream) => {
           if (err) {
+            console.error("WebSocket stream creation error:", err);
             reject(new Error(err.message));
             return;
           }
 
-          setupWebSocketStream(stream, mainWindow, streamId);
-          resolve({ success: true });
+          try {
+            setupWebSocketStream(stream, mainWindow, streamId);
+            resolve({ success: true });
+          } catch (error) {
+            console.error("WebSocket stream setup error:", error);
+            throw new Error(error.message);
+          }
         });
       });
     } catch (error) {
+      console.error("Create WebSocket stream handler error:", error);
       return { success: false, message: error.message };
     }
   });
 
-  // Stream'i kapatma handler'ı
   ipcMain.handle("close-ws-stream", (_, streamId) => {
     try {
+      if (!streamId) {
+        throw new Error("StreamId is required");
+      }
+
       if (activeStreams.has(streamId)) {
-        activeStreams.get(streamId).end();
-        activeStreams.delete(streamId);
+        try {
+          activeStreams.get(streamId).end();
+          activeStreams.delete(streamId);
+        } catch (error) {
+          console.error(`Error closing stream ${streamId}:`, error);
+          throw new Error(error.message);
+        }
       }
       return { success: true };
     } catch (error) {
+      console.error("Close WebSocket stream handler error:", error);
       return { success: false, message: error.message };
     }
   });

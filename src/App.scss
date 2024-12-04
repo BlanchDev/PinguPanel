@@ -1,3 +1,5 @@
+@use "./variables.scss" as *;
+
 @font-face {
   font-family: "Cascadia";
   src: url("/fonts/Cascadia.ttf");
@@ -16,23 +18,24 @@ body {
   display: flex;
   flex-direction: column;
   width: 100%;
-  height: calc(100vh - 30px);
-  background-color: #1c1b1f;
-  margin-top: 30px;
+  height: calc(100vh - 31px);
+  margin-top: 31px;
+
+  background: $dark-bg;
 }
 
 .yellow-title {
-  color: #f5db41;
+  color: $yellow;
 }
 
 .purple-title {
-  color: #6658ff;
+  color: $light-purple;
 }
 
 .button {
   width: max-content;
   padding: 7px 10px;
-  border-radius: 4px;
+  border-radius: 1px;
   font-family: "Cascadia", sans-serif;
   text-align: center;
   cursor: pointer;
@@ -49,51 +52,51 @@ body {
 
   &.yellow {
     background-color: transparent;
-    color: #f5db41;
-    border: 1px solid #555;
+    color: $yellow;
+    border: 1px solid $yellow-bg;
 
     &:hover {
-      background-color: #524810;
+      background-color: $yellow-bg;
     }
   }
 
   &.purple {
     background-color: transparent;
-    color: #837eff;
-    border: 1px solid #555;
+    color: $light-purple;
+    border: 1px solid $purple-bg;
 
     &:hover {
-      background-color: #201f41;
+      background-color: $purple-bg;
     }
   }
 
   &.red {
     background-color: transparent;
-    color: #ff5555;
-    border: 1px solid #555;
+    color: $red;
+    border: 1px solid $red-bg;
 
     &:hover {
-      background-color: #491616;
+      background-color: $red-bg;
     }
   }
 
   &.green {
     background-color: transparent;
-    color: #66ed66;
-    border: 1px solid #555;
+    color: $green;
+    border: 1px solid $green-bg;
 
     &:hover {
-      background-color: #103e10;
+      background-color: $green-bg;
     }
   }
 
   &.gray {
     background-color: transparent;
-    color: #d3d3d3;
-    border: 1px solid #555;
+    color: $gray;
+    border: 1px solid $gray-bg;
 
     &:hover {
-      background-color: #2f3034;
+      background-color: $gray-bg;
     }
   }
 }
@@ -110,14 +113,16 @@ body {
     width: calc(100% - 24px);
     padding: 8px 12px;
     border-radius: 4px;
-    border: 1px solid #333;
-    background: #171619;
+    border: 1px solid $classic-border;
+    background: #010407;
     color: #fff;
     font-size: 14px;
+    transition: all 0.2s ease;
 
     &:focus {
       outline: none;
       border: 1px solid #60592b;
+      background: #0f1518;
     }
 
     &::placeholder {
@@ -130,14 +135,40 @@ body {
     min-height: 120px;
     padding: 8px 12px;
     border-radius: 4px;
-    border: 1px solid #333;
-    background: #171619;
+    border: 1px solid $classic-border;
+    background: #010407;
     color: #fff;
     font-size: 12px;
+    transition: all 0.2s ease;
 
     &:focus {
       outline: none;
       border-color: #60592b;
+      background: #0f1518;
     }
+  }
+}
+
+.modal-content {
+  position: relative;
+  z-index: 100;
+  width: 100%;
+  max-width: 600px;
+  min-height: 200px;
+  background-color: $dark-bg;
+  border: 1px solid $darkblue;
+  padding: 20px;
+  border-radius: 4px;
+
+  .top {
+    width: 100%;
+  }
+
+  .body {
+    width: 100%;
+  }
+
+  .bottom {
+    width: 100%;
   }
 }
