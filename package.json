@@ -3,7 +3,7 @@
   "private": true,
   "version": "0.0.1",
   "author": "blanch.dev",
-  "description": "PinguPanel - VPS Server Management Tool",
+  "description": "PinguPanel - Visual VPS management panel for web applications.",
   "homepage": "https://pingupanel.com",
   "type": "module",
   "main": "electron/main.js",
