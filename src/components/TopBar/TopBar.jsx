@@ -1,4 +1,4 @@
-import "./TopBar.css";
+import "./TopBar.scss";
 import logo from "../../assets/penguin.png";
 
 function TopBar() {

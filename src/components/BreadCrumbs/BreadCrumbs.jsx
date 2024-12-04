@@ -1,5 +1,5 @@
 import { Link, useLocation } from "react-router-dom";
-import "./BreadCrumbs.css";
+import "./BreadCrumbs.scss";
 
 function BreadCrumbs() {
   const location = useLocation();

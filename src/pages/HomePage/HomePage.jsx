@@ -1,5 +1,5 @@
 import { NavLink } from "react-router-dom";
-import "./HomePage.css";
+import "./HomePage.scss";
 import { useEffect, useState } from "react";
 import PassphraseMenu from "./components/PassphraseMenu";
 
@@ -8,23 +8,21 @@ function HomePage() {
   const [passphraseMenu, setPassphraseMenu] = useState({});
 
   useEffect(() => {
-    window.Electron.connections.get().then(setConnections);
+    window.Electron.connections.getConnections().then((data) => {
+      if (data.success) {
+        setConnections(data.connections);
+      }
+    });
   }, []);
 
   const handleDeleteConnection = (id) => {
-    window.Electron.connections.delete(id).then(() => {
+    window.Electron.connections.deleteConnection(id).then(() => {
       setConnections(connections.filter((connection) => connection.id !== id));
     });
   };
 
   return (
     <div className='home-page column gap10'>
-      {Object.keys(passphraseMenu).length > 0 && (
-        <PassphraseMenu
-          passphraseMenu={passphraseMenu}
-          setPassphraseMenu={setPassphraseMenu}
-        />
-      )}
       <h1>
         Welcome to{" "}
         <span
@@ -46,10 +44,9 @@ function HomePage() {
           </div>
         </div>
         <div className='saved-connections-list row gap10'>
-          {connections.map((connection) => (
+          {connections?.map((connection) => (
             <div className='column gap5' key={connection.id}>
-              <NavLink
-                to={`/connection/${connection.id}`}
+              <button
                 className='saved-connection column gap5'
                 onClick={(e) => {
                   e.preventDefault();
@@ -57,7 +54,7 @@ function HomePage() {
                 }}
                 style={
                   passphraseMenu.id === connection.id
-                    ? { backgroundColor: "#555555" }
+                    ? { backgroundColor: "#103e10" }
                     : {}
                 }
               >
@@ -66,7 +63,7 @@ function HomePage() {
                   {connection.host}:{connection.port}
                 </span>
                 <span className='username'>{connection.username}</span>
-              </NavLink>
+              </button>
               <div className='w100 row aife gap5'>
                 <button className='w100 button gray'>Edit</button>
                 <button
@@ -80,6 +77,12 @@ function HomePage() {
           ))}
         </div>
       </div>
+      {Object.keys(passphraseMenu).length > 0 && (
+        <PassphraseMenu
+          passphraseMenu={passphraseMenu}
+          setPassphraseMenu={setPassphraseMenu}
+        />
+      )}
     </div>
   );
 }
