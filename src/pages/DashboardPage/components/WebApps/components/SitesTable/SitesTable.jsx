@@ -16,6 +16,7 @@ function SitesTable() {
       if (!webAppsDirectory) return;
 
       setLoading(loading);
+      setMyWebAppsLoading(loading);
       fetchSites(webAppsDirectory)
         .then((newSites) => {
           setSites(newSites);
@@ -46,8 +47,9 @@ function SitesTable() {
 
   if (loading || myConnLoading) {
     return (
-      <div className='info-content column aic jcc'>
+      <div className='info-content column aic jcc gap25'>
         <div className='loading-spinner' />
+        <p>Loading web apps...</p>
       </div>
     );
   }

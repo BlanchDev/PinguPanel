@@ -3,7 +3,7 @@ import "./PassphraseMenu.scss";
 import PropTypes from "prop-types";
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
-import ModalTemplate from "../../../components/modals/ModalTemplate/ModalTemplate";
+import ModalTemplate from "../../../../../components/modals/ModalTemplate/ModalTemplate";
 
 function PassphraseMenu({ passphraseMenu, setPassphraseMenu }) {
   const [passphrase, setPassphrase] = useState("");
@@ -39,9 +39,7 @@ function PassphraseMenu({ passphraseMenu, setPassphraseMenu }) {
         onSubmit={(e) => handleEnterPassphrase(e)}
       >
         <div className='passphrase-menu-header row aic jcsb'>
-          <h4>
-            Connect to {passphraseMenu.host}:{passphraseMenu.port}
-          </h4>
+          <h4>Connect to {passphraseMenu.name}</h4>
           <button
             className='button red'
             type='button'

@@ -1,11 +1,15 @@
 import { NavLink } from "react-router-dom";
 import "./HomePage.scss";
 import { useEffect, useState } from "react";
-import PassphraseMenu from "./components/PassphraseMenu";
+import PassphraseMenu from "./components/modals/PassphraseMenu/PassphraseMenu";
+import EditConnectionModal from "./components/modals/EditConnectionModal/EditConnectionModal";
 
 function HomePage() {
   const [connections, setConnections] = useState([]);
   const [passphraseMenu, setPassphraseMenu] = useState({});
+  const [safeConnection, setSafeConnection] = useState({});
+
+  //TODO: .ENV FILE WARNING MODAL. Users need change the ENCRYPTION_KEY in .env file.
 
   useEffect(() => {
     window.Electron.connections.getConnections().then((data) => {
@@ -13,7 +17,7 @@ function HomePage() {
         setConnections(data.connections);
       }
     });
-  }, []);
+  }, [safeConnection]);
 
   const handleDeleteConnection = (id) => {
     window.Electron.connections.deleteConnection(id).then(() => {
@@ -59,13 +63,21 @@ function HomePage() {
                 }
               >
                 <span className='name yellow-title'>{connection.name}</span>
-                <span className='host'>
-                  {connection.host}:{connection.port}
-                </span>
-                <span className='username'>{connection.username}</span>
+                <span className='host'>{connection.host}</span>
               </button>
               <div className='w100 row aife gap5'>
-                <button className='w100 button gray'>Edit</button>
+                <button
+                  className='w100 button gray'
+                  onClick={() =>
+                    setSafeConnection(() => {
+                      const safeConnection = { ...connection };
+                      delete safeConnection.privateKey;
+                      return safeConnection;
+                    })
+                  }
+                >
+                  Edit
+                </button>
                 <button
                   className='w100 button gray'
                   onClick={() => handleDeleteConnection(connection.id)}
@@ -77,6 +89,13 @@ function HomePage() {
           ))}
         </div>
       </div>
+      {/* MODALS */}
+      {Object.keys(safeConnection).length > 0 && (
+        <EditConnectionModal
+          safeConnection={safeConnection}
+          modalClose={() => setSafeConnection({})}
+        />
+      )}
       {Object.keys(passphraseMenu).length > 0 && (
         <PassphraseMenu
           passphraseMenu={passphraseMenu}

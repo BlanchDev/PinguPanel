@@ -1,8 +1,21 @@
 import crypto from "crypto";
 import process from "process";
 import { Buffer } from "buffer";
+import dotenv from "dotenv";
+import { app } from "electron";
+import path from "path";
 
-const ENCRYPTION_KEY = process.env?.ENCRYPTION_KEY;
+const envPath = app.isPackaged
+  ? path.join(process.resourcesPath, ".env")
+  : path.join(process.cwd(), ".env");
+
+dotenv.config({ path: envPath });
+
+if (!process.env.ENCRYPTION_KEY) {
+  throw new Error("ENCRYPTION_KEY is not defined in the environment variables");
+}
+
+const ENCRYPTION_KEY = process.env.ENCRYPTION_KEY;
 const ALGORITHM = "aes-256-gcm";
 const IV_LENGTH = 16;
 const SALT_LENGTH = 64;

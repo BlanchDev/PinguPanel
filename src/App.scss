@@ -90,6 +90,16 @@ body {
     }
   }
 
+  &.blue {
+    background-color: transparent;
+    color: $blue;
+    border: 1px solid $blue-bg;
+
+    &:hover {
+      background-color: $blue-bg;
+    }
+  }
+
   &.gray {
     background-color: transparent;
     color: $gray;
