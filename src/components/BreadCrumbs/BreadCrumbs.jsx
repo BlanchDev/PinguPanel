@@ -1,8 +1,12 @@
-import { Link, useLocation } from "react-router-dom";
+import { Link, useLocation, useParams } from "react-router-dom";
 import "./BreadCrumbs.scss";
+import { useConnection } from "../../pages/DashboardPage/context/Context";
 
 function BreadCrumbs() {
   const location = useLocation();
+  const { connectionId } = useParams();
+  const connectionContext = useConnection();
+  const myConn = connectionContext ? connectionContext.myConn : undefined;
 
   const pathnames = location.pathname.split("/").filter((x) => x);
 
@@ -11,6 +15,12 @@ function BreadCrumbs() {
       case "save-new-connection":
         return "Save New SSH Connection";
 
+      case connectionId:
+        return myConn.name;
+
+      case "system-info":
+        return "System Info";
+
       default:
         return path;
     }
@@ -18,11 +28,23 @@ function BreadCrumbs() {
 
   return (
     <div className='bread-crumbs row aic'>
-      <div className='bread-crumbs-item'>
-        <Link to='/'>Home</Link>
-      </div>
+      {connectionId ? (
+        <div className='bread-crumbs-item'>
+          <Link to={`/dashboard/${connectionId}`}>
+            {getPageTitle(connectionId)}
+          </Link>
+        </div>
+      ) : (
+        <div className='bread-crumbs-item'>
+          <Link to='/'>Home</Link>
+        </div>
+      )}
 
       {pathnames.map((name, index) => {
+        if (name === "dashboard" || name === connectionId) {
+          return null;
+        }
+
         const routeTo = `/${pathnames.slice(0, index + 1).join("/")}`;
         const isLast = index === pathnames.length - 1;
 

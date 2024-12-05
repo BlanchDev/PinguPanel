@@ -14,6 +14,8 @@ function createWindow() {
       sandbox: true,
       nodeIntegration: false,
       contextIsolation: true,
+      worldSafeExecuteJavaScript: true,
+      enableRemoteModule: false,
       preload: join(getPath(), "preload.cjs"),
       devTools: process.env.NODE_ENV === "development",
     },

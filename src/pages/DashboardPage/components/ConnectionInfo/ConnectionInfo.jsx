@@ -1,38 +1,39 @@
-import { useNavigate } from "react-router-dom";
-import { toast } from "react-toastify";
 import { useConnection } from "../../context/Context";
+import { useState } from "react";
+import DisconnectConnModal from "./components/modals/DisconnectConnModal/DisconnectConnModal";
+import { Link } from "react-router-dom";
 
 function ConnectionInfo() {
-  const navigate = useNavigate();
+  const [disconnectModalOpen, setDisconnectModalOpen] = useState(false);
 
   const { myConn } = useConnection();
 
   return (
-    <div className='info-item column gap10'>
-      <h2 className='yellow-title'>{myConn.name}</h2>
-      <div className='info-content column gap5'>
-        <p>
-          IP: <span>{myConn.host}</span>
-        </p>
-        <p>
-          Port: <span>{myConn.port}</span>
-        </p>
-        <p>
-          User: <span>{myConn.username}</span>
-        </p>
+    <fieldset className='box column gap10'>
+      <legend className='title yellow-title'>{myConn.name}</legend>
+      <div className='content column gap10'>
+        <fieldset>
+          <legend>IP</legend>
+          <span>{myConn.host}</span>
+        </fieldset>
       </div>
-      <button
-        className='button red'
-        onClick={() => {
-          window.Electron.ssh.disconnectSSH().then(() => {
-            toast.success("Connection closed successfully!");
-            navigate("/");
-          });
-        }}
-      >
-        Exit
-      </button>
-    </div>
+      <div className='row aic gap15'>
+        <button
+          className='button red'
+          onClick={() => setDisconnectModalOpen(true)}
+        >
+          Exit
+        </button>
+        <Link to='system-info' className='button blue'>
+          System Info
+        </Link>
+      </div>
+
+      {/* MODALS */}
+      {disconnectModalOpen && (
+        <DisconnectConnModal modalClose={() => setDisconnectModalOpen(false)} />
+      )}
+    </fieldset>
   );
 }
 

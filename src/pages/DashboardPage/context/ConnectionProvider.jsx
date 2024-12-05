@@ -18,14 +18,11 @@ export function ConnectionProvider({ children }) {
       if (data.success) {
         const conn = data.connections.find((c) => c.id === connectionId);
         if (conn) {
-          setMyConn((prev) => {
-            if (JSON.stringify(prev) !== JSON.stringify(conn)) {
-              const rest = { ...conn };
-              delete rest["privateKey"];
+          setMyConn(() => {
+            const safeConn = { ...conn };
+            delete safeConn["privateKey"];
 
-              return rest;
-            }
-            return prev;
+            return safeConn;
           });
         }
       } else {

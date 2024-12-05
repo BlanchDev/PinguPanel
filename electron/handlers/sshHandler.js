@@ -138,7 +138,7 @@ export function setupSSHHandlers(mainWindow) {
 
         const config = {
           host: connectionData.host,
-          port: connectionData.port || 22,
+          port: connectionData.port,
           username: connectionData.username,
           privateKey: connectionData.privateKey,
           passphrase: connectionData.passphrase,

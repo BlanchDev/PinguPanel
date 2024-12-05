@@ -37,14 +37,17 @@ export async function setupConnectionHandlers() {
       }
 
       connections.push(connection);
-      console.log("Connections to be saved:", connections);
+      console.log("Connections to be saved:", connections.length);
 
       const encryptedData = await encrypt(connections);
       await fs.writeFile(CONNECTIONS_FILE, encryptedData);
 
       const verifyData = await fs.readFile(CONNECTIONS_FILE, "utf8");
       const verifiedConnections = await decrypt(verifyData);
-      console.log("Connections after verification:", verifiedConnections);
+      console.log(
+        "Connections after verification:",
+        verifiedConnections.length,
+      );
 
       return { success: true, connections: verifiedConnections };
     } catch (error) {

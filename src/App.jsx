@@ -4,10 +4,10 @@ import "react-toastify/dist/ReactToastify.css";
 import "./App.scss";
 import TopBar from "./components/TopBar/TopBar";
 import DashboardPage from "./pages/DashboardPage/DashboardPage";
-import HomePage from "./pages/HomePage/HomePAge";
+import HomePage from "./pages/HomePage/HomePage";
 import SaveNewConnectionPage from "./pages/SaveNewConnectionPage/SaveNewConnectionPage";
-import { ConnectionProvider } from "./pages/DashboardPage/context/ConnectionProvider";
-import { WebAppsProvider } from "./pages/DashboardPage/context/WebAppsProvider";
+import SystemInfoPage from "./pages/DashboardPage/pages/SystemInfoPage/SystemInfoPage";
+import DashboardLayout from "./pages/DashboardLayout/DashboardLayout";
 
 function App() {
   return (
@@ -19,16 +19,10 @@ function App() {
           path='/save-new-connection'
           element={<SaveNewConnectionPage />}
         />
-        <Route
-          path='/dashboard/:connectionId'
-          element={
-            <ConnectionProvider>
-              <WebAppsProvider>
-                <DashboardPage />
-              </WebAppsProvider>
-            </ConnectionProvider>
-          }
-        />
+        <Route path='/dashboard/:connectionId' element={<DashboardLayout />}>
+          <Route index element={<DashboardPage />} />
+          <Route path='system-info' element={<SystemInfoPage />} />
+        </Route>
         <Route path='*' element={<Navigate to='/' />} />
       </Routes>
 

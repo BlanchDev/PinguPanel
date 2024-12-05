@@ -1,10 +1,8 @@
 import { app, BrowserWindow } from "electron";
 import createWindow from "./createWindow.js";
 import process from "process";
-import {
-  setupConnectionHandlers,
-  setupSSHHandlers,
-} from "../handlers/index.js";
+import { setupConnectionHandlers } from "../handlers/connectionHandler.js";
+import { setupSSHHandlers } from "../handlers/sshHandler.js";
 
 let mainWindow = null;
 

@@ -9,10 +9,10 @@
   "main": "electron/main.js",
   "scripts": {
     "dev:react": "NODE_ENV=development bunx --bun vite",
-    "dev:electron": "NODE_ENV=development bunx --bun electron .",
+    "dev:electron": "cross-env NODE_ENV=development bunx --bun electron .",
     "dev:all": "concurrently \"bun run dev:react\" \"bun run dev:electron\"",
     "build:react": "bunx --bun vite build",
-    "build:electron": "cross-env ELECTRON_BUILDER_ALLOW_UNRESOLVED_DEPENDENCIES=true electron-builder --win",
+    "build:electron": "cross-env electron-builder --win",
     "build:all": "bun run build:react && bun run build:electron"
   },
   "build": {
@@ -21,6 +21,12 @@
     "files": [
       "dist/**/*",
       "electron/**/*"
+    ],
+    "extraResources": [
+      {
+        "from": ".env",
+        "to": ".env"
+      }
     ],
     "directories": {
       "buildResources": "assets",
@@ -55,7 +61,8 @@
     "react-toastify": "^10.0.6",
     "sass": "^1.81.1",
     "sass-embedded": "^1.81.1",
-    "ssh2": "^1.16.0"
+    "ssh2": "^1.16.0",
+    "dotenv": "^16.4.6"
   },
   "devDependencies": {
     "@eslint/js": "^9.13.0",
@@ -63,7 +70,6 @@
     "@types/react-dom": "^18.3.1",
     "@vitejs/plugin-react": "^4.3.3",
     "cross-env": "^7.0.3",
-    "dotenv": "^16.4.6",
     "electron": "^33.2.0",
     "electron-builder": "^25.1.8",
     "eslint": "^9.13.0",

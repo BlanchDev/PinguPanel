@@ -27,25 +27,25 @@ function WebApps() {
   return (
     <>
       {myConnLoading ? (
-        <div className='info-item column gap10'>
-          <h2 className='yellow-title'>Web Apps</h2>
-          <div className='info-content column aic jcc'>
+        <fieldset className='box column gap10'>
+          <legend className='title yellow-title'>Web Apps</legend>
+          <div className='content column aic jcc gap25'>
             <div className='loading-spinner' />
+            <p>Loading web apps...</p>
           </div>
-        </div>
+        </fieldset>
       ) : (
-        <div className='info-item column gap25'>
+        <fieldset className='box column gap25'>
+          <legend className='title yellow-title'>Web Apps</legend>
           <div className='row aic jcsb'>
-            <div className='row aic gap10'>
-              <h2 className='yellow-title'>Web Apps</h2>
-              <button
-                className='button purple'
-                onClick={() => setSelectedDirectoryModalOpen(true)}
-                disabled={myWebAppsLoading}
-              >
-                {webAppsDirectory || "*Select Directory"}
-              </button>
-            </div>
+            <button
+              className='button purple'
+              onClick={() => setSelectedDirectoryModalOpen(true)}
+              disabled={myWebAppsLoading}
+            >
+              {webAppsDirectory || "*Select Directory"}
+            </button>
+
             <button
               className='button yellow'
               onClick={() => setCreateNewWebAppModalOpen(true)}
@@ -54,7 +54,7 @@ function WebApps() {
               Create New Web App
             </button>
           </div>
-          <div className='info-content column gap5'>
+          <div className='content column gap5'>
             {webAppsDirectory ? (
               <SitesTable />
             ) : (
@@ -72,7 +72,7 @@ function WebApps() {
               modalClose={() => setCreateNewWebAppModalOpen(false)}
             />
           )}
-        </div>
+        </fieldset>
       )}
     </>
   );

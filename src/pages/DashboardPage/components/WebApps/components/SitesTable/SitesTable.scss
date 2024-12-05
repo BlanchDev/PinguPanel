@@ -7,7 +7,7 @@
 
   th,
   td {
-    border: 1px solid $darkblue;
+    border: 1px solid $blue-bg;
     text-align: center;
     padding: 10px;
   }
@@ -18,7 +18,7 @@
   }
 
   tr:has(th) {
-    background-color: $yellow-bg;
+    background-color: $darkblue;
   }
 
   th {
