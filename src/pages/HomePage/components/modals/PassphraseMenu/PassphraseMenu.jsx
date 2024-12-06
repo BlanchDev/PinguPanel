@@ -35,11 +35,11 @@ function PassphraseMenu({ passphraseMenu, setPassphraseMenu }) {
   return (
     <ModalTemplate modalClose={() => setPassphraseMenu({})}>
       <form
-        className='modal-content passphrase-menu-content column aic jcsb'
+        className='modal-content passphrase-menu-content column aic gap20'
         onSubmit={(e) => handleEnterPassphrase(e)}
       >
-        <div className='passphrase-menu-header row aic jcsb'>
-          <h4>Connect to {passphraseMenu.name}</h4>
+        <div className='top row aic jcsb'>
+          <h3 className='purple-title'>Connect to {passphraseMenu.name}</h3>
           <button
             className='button red'
             type='button'
@@ -48,7 +48,7 @@ function PassphraseMenu({ passphraseMenu, setPassphraseMenu }) {
             Close
           </button>
         </div>
-        <div className='passphrase-menu-body form-item column gap10'>
+        <div className='body passphrase-menu-body form-item column gap10'>
           <label htmlFor='passphrase'>Enter Passphrase</label>
           <input
             id='passphrase'
@@ -59,6 +59,8 @@ function PassphraseMenu({ passphraseMenu, setPassphraseMenu }) {
             required
             autoFocus
           />
+        </div>
+        <div className='bottom row aic jcc'>
           <button className='button green' type='submit' disabled={loading}>
             {loading ? "Connecting..." : "Connect"}
           </button>

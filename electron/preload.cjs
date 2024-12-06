@@ -1,6 +1,10 @@
 const { contextBridge, ipcRenderer } = require("electron");
 
 contextBridge.exposeInMainWorld("Electron", {
+  settings: {
+    getWinSize: () => ipcRenderer.invoke("getWinSize"),
+    setWinSize: (size) => ipcRenderer.invoke("setWinSize", size),
+  },
   connections: {
     getConnections: () => ipcRenderer.invoke("get-connections"),
     addConnection: (connection) =>
@@ -10,13 +14,13 @@ contextBridge.exposeInMainWorld("Electron", {
       ipcRenderer.invoke("edit-connection", id, data),
   },
   ssh: {
-    // Mevcut metodlar
+    // SSH
     connectSSH: (connectionData) =>
       ipcRenderer.invoke("connect-ssh", connectionData),
     executeCommand: (command) => ipcRenderer.invoke("execute-command", command),
     disconnectSSH: () => ipcRenderer.invoke("disconnect-ssh"),
 
-    // Güncellenen WebSocket metodları
+    // WebSocket
     createWsStream: (command, streamId) =>
       ipcRenderer.invoke("create-ws-stream", { command, streamId }),
 

@@ -1,5 +1,6 @@
 import { useEffect, useState } from "react";
 import BreadCrumbs from "../../../../components/BreadCrumbs/BreadCrumbs";
+import "./SystemInfoPage.scss";
 
 function SystemInfoPage() {
   const [systemInfo, setSystemInfo] = useState({
@@ -126,156 +127,160 @@ function SystemInfoPage() {
 
   if (loading) {
     return (
-      <div className='system-info column gap10'>
+      <>
         <BreadCrumbs />
+        <div className='system-info-page column gap10'>
+          <div className='box-container'>
+            <div className='grid4'>
+              <fieldset className='box column gap5'>
+                <legend className='title yellow-title'>System Details</legend>
+                <div className='content column aic jcc gap25'>
+                  <div className='loading-spinner' />
+                  <p>Loading OS info...</p>
+                </div>
+              </fieldset>
+
+              <div className='column gap10'>
+                <fieldset className='box column flex1 gap5'>
+                  <legend className='title yellow-title'>Memory</legend>
+                  <div className='content column aic jcc gap25'>
+                    <div className='loading-spinner' />
+                    <p>Loading memory info...</p>
+                  </div>
+                </fieldset>
+
+                <fieldset className='box column flex1 gap5'>
+                  <legend className='title yellow-title'>Disk</legend>
+                  <div className='content column aic jcc gap25'>
+                    <div className='loading-spinner' />
+                    <p>Loading disk info...</p>
+                  </div>
+                </fieldset>
+              </div>
+
+              <fieldset className='box grid-col-2 column gap5'>
+                <legend className='title yellow-title'>CPU</legend>
+                <div className='content column aic jcc gap25'>
+                  <div className='loading-spinner' />
+                  <p>Loading CPU info...</p>
+                </div>
+              </fieldset>
+            </div>
+          </div>
+        </div>
+      </>
+    );
+  }
+
+  return (
+    <>
+      <BreadCrumbs />
+      <div className='system-info-page column gap10'>
         <div className='box-container'>
           <div className='grid4'>
             <fieldset className='box column gap5'>
               <legend className='title yellow-title'>System Details</legend>
-              <div className='content column aic jcc gap25'>
-                <div className='loading-spinner' />
-                <p>Loading OS info...</p>
+              <div className='content column gap15'>
+                <fieldset>
+                  <legend>PC Name</legend>
+                  <span>{systemInfo?.pcName}</span>
+                </fieldset>
+                <fieldset>
+                  <legend>OS</legend>
+                  <span>{systemInfo?.systemDetails.os}</span>
+                </fieldset>
+                <fieldset>
+                  <legend>Kernel</legend>
+                  <span>{systemInfo?.systemDetails.kernel}</span>
+                </fieldset>
+                <fieldset>
+                  <legend>Distro</legend>
+                  <span>{systemInfo?.systemDetails.distro}</span>
+                </fieldset>
+                <fieldset>
+                  <legend>Version</legend>
+                  <span>{systemInfo?.systemDetails.version}</span>
+                </fieldset>
+                <fieldset>
+                  <legend>Arch</legend>
+                  <span>{systemInfo?.systemDetails.arch}</span>
+                </fieldset>
               </div>
             </fieldset>
 
             <div className='column gap10'>
               <fieldset className='box column flex1 gap5'>
                 <legend className='title yellow-title'>Memory</legend>
-                <div className='content column aic jcc gap25'>
-                  <div className='loading-spinner' />
-                  <p>Loading memory info...</p>
+                <div className='content column gap15'>
+                  <fieldset>
+                    <legend>Total</legend>
+                    <span>{systemInfo?.memory.total} MB</span>
+                  </fieldset>
+                  <fieldset>
+                    <legend>Used</legend>
+                    <span>{systemInfo?.memory.used} MB</span>
+                  </fieldset>
+                  <fieldset>
+                    <legend>Free</legend>
+                    <span>{systemInfo?.memory.free} MB</span>
+                  </fieldset>
                 </div>
               </fieldset>
 
               <fieldset className='box column flex1 gap5'>
                 <legend className='title yellow-title'>Disk</legend>
-                <div className='content column aic jcc gap25'>
-                  <div className='loading-spinner' />
-                  <p>Loading disk info...</p>
+                <div className='content column gap15'>
+                  <fieldset>
+                    <legend>Total</legend>
+                    <span>{systemInfo?.disk.total} MB</span>
+                  </fieldset>
+                  <fieldset>
+                    <legend>Used</legend>
+                    <span>{systemInfo?.disk.used} MB</span>
+                  </fieldset>
+                  <fieldset>
+                    <legend>Free</legend>
+                    <span>{systemInfo?.disk.free} MB</span>
+                  </fieldset>
                 </div>
               </fieldset>
             </div>
 
             <fieldset className='box grid-col-2 column gap5'>
               <legend className='title yellow-title'>CPU</legend>
-              <div className='content column aic jcc gap25'>
-                <div className='loading-spinner' />
-                <p>Loading CPU info...</p>
+              <div className='content column gap15'>
+                <fieldset>
+                  <legend>Name</legend>
+                  <span>{systemInfo?.cpu.name}</span>
+                </fieldset>
+                <fieldset>
+                  <legend>Cores</legend>
+                  <span>{systemInfo?.cpu.cores}</span>
+                </fieldset>
+                <fieldset>
+                  <legend>Speed</legend>
+                  <span>{systemInfo?.cpu.speed}</span>
+                </fieldset>
+                <fieldset>
+                  <legend>Uptime</legend>
+                  <span>{systemInfo?.uptime}</span>
+                </fieldset>
+                <fieldset>
+                  <legend>Tasks</legend>
+                  <div className='column gap5'>
+                    <span>Total: {systemInfo?.tasks.total} </span>
+                    <span>Running: {systemInfo?.tasks.running} </span>
+                    <span>Sleeping: {systemInfo?.tasks.sleeping} </span>
+                    <span>Stopped: {systemInfo?.tasks.stopped} </span>
+                    <span>Zombie: {systemInfo?.tasks.zombie} </span>
+                  </div>
+                </fieldset>
               </div>
             </fieldset>
           </div>
         </div>
       </div>
-    );
-  }
-
-  return (
-    <div className='system-info column gap10'>
-      <BreadCrumbs />
-      <div className='box-container'>
-        <div className='grid4'>
-          <fieldset className='box column gap5'>
-            <legend className='title yellow-title'>System Details</legend>
-            <div className='content column gap15'>
-              <fieldset>
-                <legend>PC Name</legend>
-                <span>{systemInfo?.pcName}</span>
-              </fieldset>
-              <fieldset>
-                <legend>OS</legend>
-                <span>{systemInfo?.systemDetails.os}</span>
-              </fieldset>
-              <fieldset>
-                <legend>Kernel</legend>
-                <span>{systemInfo?.systemDetails.kernel}</span>
-              </fieldset>
-              <fieldset>
-                <legend>Distro</legend>
-                <span>{systemInfo?.systemDetails.distro}</span>
-              </fieldset>
-              <fieldset>
-                <legend>Version</legend>
-                <span>{systemInfo?.systemDetails.version}</span>
-              </fieldset>
-              <fieldset>
-                <legend>Arch</legend>
-                <span>{systemInfo?.systemDetails.arch}</span>
-              </fieldset>
-            </div>
-          </fieldset>
-
-          <div className='column gap10'>
-            <fieldset className='box column flex1 gap5'>
-              <legend className='title yellow-title'>Memory</legend>
-              <div className='content column gap15'>
-                <fieldset>
-                  <legend>Total</legend>
-                  <span>{systemInfo?.memory.total} MB</span>
-                </fieldset>
-                <fieldset>
-                  <legend>Used</legend>
-                  <span>{systemInfo?.memory.used} MB</span>
-                </fieldset>
-                <fieldset>
-                  <legend>Free</legend>
-                  <span>{systemInfo?.memory.free} MB</span>
-                </fieldset>
-              </div>
-            </fieldset>
-
-            <fieldset className='box column flex1 gap5'>
-              <legend className='title yellow-title'>Disk</legend>
-              <div className='content column gap15'>
-                <fieldset>
-                  <legend>Total</legend>
-                  <span>{systemInfo?.disk.total} MB</span>
-                </fieldset>
-                <fieldset>
-                  <legend>Used</legend>
-                  <span>{systemInfo?.disk.used} MB</span>
-                </fieldset>
-                <fieldset>
-                  <legend>Free</legend>
-                  <span>{systemInfo?.disk.free} MB</span>
-                </fieldset>
-              </div>
-            </fieldset>
-          </div>
-
-          <fieldset className='box grid-col-2 column gap5'>
-            <legend className='title yellow-title'>CPU</legend>
-            <div className='content column gap15'>
-              <fieldset>
-                <legend>Name</legend>
-                <span>{systemInfo?.cpu.name}</span>
-              </fieldset>
-              <fieldset>
-                <legend>Cores</legend>
-                <span>{systemInfo?.cpu.cores}</span>
-              </fieldset>
-              <fieldset>
-                <legend>Speed</legend>
-                <span>{systemInfo?.cpu.speed}</span>
-              </fieldset>
-              <fieldset>
-                <legend>Uptime</legend>
-                <span>{systemInfo?.uptime}</span>
-              </fieldset>
-              <fieldset>
-                <legend>Tasks</legend>
-                <div className='column gap5'>
-                  <span>Total: {systemInfo?.tasks.total} </span>
-                  <span>Running: {systemInfo?.tasks.running} </span>
-                  <span>Sleeping: {systemInfo?.tasks.sleeping} </span>
-                  <span>Stopped: {systemInfo?.tasks.stopped} </span>
-                  <span>Zombie: {systemInfo?.tasks.zombie} </span>
-                </div>
-              </fieldset>
-            </div>
-          </fieldset>
-        </div>
-      </div>
-    </div>
+    </>
   );
 }
 

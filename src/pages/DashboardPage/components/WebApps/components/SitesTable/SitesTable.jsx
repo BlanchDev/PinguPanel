@@ -54,6 +54,14 @@ function SitesTable() {
     );
   }
 
+  if (sites.some((site) => site.domain.includes("No such file or directory"))) {
+    return (
+      <div className='info-content column aic jcc gap25'>
+        <p>No web apps found</p>
+      </div>
+    );
+  }
+
   return (
     <table className='web-apps-table'>
       <thead>

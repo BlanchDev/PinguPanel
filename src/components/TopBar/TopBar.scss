@@ -4,14 +4,44 @@
   top: 0;
   left: 0;
   right: 0;
-  width: 100%;
+  width: 100vw;
   height: 31px;
   background-color: #000;
   border-bottom: 1px solid #131313;
-  color: #f5db41;
-  padding: 0 10px;
-  font-size: 14px;
+  padding-left: 10px;
   -webkit-app-region: drag;
-  font-weight: 600;
-  font-family: "Cascadia", sans-serif;
+
+  .top-bar-title {
+    font-size: 14px;
+    font-weight: 600;
+    font-family: "Cascadia", sans-serif;
+
+    .title {
+      color: #f5db41;
+    }
+  }
+
+  .icon-container {
+    color: #f5db41;
+    position: absolute;
+    right: 136px;
+    z-index: 1000;
+    width: max-content;
+    height: 30px;
+    user-select: none;
+    -webkit-app-region: no-drag;
+
+    .icon-item {
+      cursor: default;
+      width: 45px;
+      min-width: 45px;
+      max-width: 45px;
+      height: 30px;
+      transition: all 0.15s;
+
+      &:hover {
+        background-color: #222222;
+      }
+    }
+  }
 }

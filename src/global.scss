@@ -5,24 +5,12 @@
     list-style: none;
 
     &::-webkit-scrollbar-thumb {
-        background-color: #757575;
+        background-color: #253f64;
         border-radius: 10px;
     }
 
     &::-webkit-scrollbar-track {
         background: #080808;
-    }
-}
-
-html,
-body {
-    max-width: 100vw;
-    overflow-x: hidden;
-    scroll-behavior: smooth;
-
-    &::-webkit-scrollbar {
-        width: 5px;
-        height: 0px;
     }
 }
 
@@ -34,6 +22,15 @@ body {
     font-family: var(--font-geist-sans);
     font-size: 16px;
 
+    max-width: 100vw;
+    overflow-x: hidden;
+    overflow-y: hidden;
+    scroll-behavior: smooth;
+
+    &::-webkit-scrollbar {
+        width: 5px;
+        height: 0px;
+    }
 
     ::selection {
         background-color: #474747;
@@ -164,26 +161,26 @@ $gap-values: (
 
 @each $direction in $directions {
     .#{$direction} {
-        display: inline-flex;
-        flex-direction: $direction;
+        display: inline-flex !important;
+        flex-direction: $direction !important;
     }
 }
 
 @each $alignItem-key, $alignItem-value in $align-items-values {
     .ai#{$alignItem-key} {
-        align-items: $alignItem-value;
+        align-items: $alignItem-value !important;
     }
 }
 
 @each $justifyContent-key, $justifyContent-value in $justify-content-values {
     .jc#{$justifyContent-key} {
-        justify-content: $justifyContent-value;
+        justify-content: $justifyContent-value !important;
     }
 }
 
 @each $gap-key, $gap-value in $gap-values {
     .gap#{$gap-key} {
-        gap: $gap-value;
+        gap: $gap-value !important;
     }
 }
 

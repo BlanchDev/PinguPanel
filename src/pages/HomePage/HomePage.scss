@@ -4,54 +4,39 @@
   flex: 1;
   padding: 20px;
 
-  .saved-connections {
-    padding: 20px;
-    background-color: $container-bg;
-    border-radius: 4px;
-    width: 100%;
-    border: 1px solid $darkblue;
+  .header-buttons {
+    margin-top: -25px;
+  }
 
-    .saved-connections-header {
-      width: 100%;
+  .saved-connection {
+    padding: 20px;
+    background-color: $box-bg;
+    border: 1px solid $darkblue;
+    border-radius: 1px;
+    transition: all 0.2s ease;
+
+    &:hover {
+      background-color: $box-hover-bg;
     }
 
-    .saved-connections-list {
-      width: 100%;
-      display: grid;
-      grid-template-columns: repeat(3, 1fr);
-      gap: 10px;
+    .name {
+      font-size: 1.2rem;
+      font-weight: 600;
+      display: -webkit-box;
+      -webkit-line-clamp: 1;
+      line-clamp: 1;
+      -webkit-box-orient: vertical;
+      overflow: hidden;
+    }
 
-      .saved-connection {
-        padding: 20px;
-        background-color: $box-bg;
-        border: 1px solid $darkblue;
-        border-radius: 1px;
-        transition: all 0.2s ease;
+    .host {
+      font-size: 0.8rem;
+      color: #b6b6b6;
+    }
 
-        &:hover {
-          background-color: $box-hover-bg;
-        }
-
-        .name {
-          font-size: 1.2rem;
-          font-weight: 600;
-          display: -webkit-box;
-          -webkit-line-clamp: 1;
-          line-clamp: 1;
-          -webkit-box-orient: vertical;
-          overflow: hidden;
-        }
-
-        .host {
-          font-size: 0.8rem;
-          color: #b6b6b6;
-        }
-
-        .username {
-          font-size: 0.8rem;
-          color: #b6b6b6;
-        }
-      }
+    .username {
+      font-size: 0.8rem;
+      color: #b6b6b6;
     }
   }
 }

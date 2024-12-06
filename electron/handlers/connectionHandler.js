@@ -4,7 +4,7 @@ import { CONNECTIONS_FILE, initStorage } from "./storageHandler.js";
 import { encrypt, decrypt } from "../utils/encryption.js";
 
 export async function setupConnectionHandlers() {
-  await initStorage();
+  await initStorage(CONNECTIONS_FILE);
 
   ipcMain.handle("get-connections", async () => {
     try {
