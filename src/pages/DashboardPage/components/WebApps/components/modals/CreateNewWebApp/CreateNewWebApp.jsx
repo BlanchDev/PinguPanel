@@ -81,7 +81,11 @@ function CreateNewWebApp({ modalClose }) {
           </div>
         </div>
         <div className='bottom row aic jcc'>
-          <button className='button green' type='submit' disabled={loading}>
+          <button
+            className='button green'
+            type='submit'
+            disabled={loading || projectName.length === 0}
+          >
             {loading ? "Creating..." : "Create"}
           </button>
         </div>

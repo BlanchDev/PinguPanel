@@ -27,27 +27,14 @@ function HomePage() {
 
   return (
     <div className='home-page column gap10'>
-      <h1>
-        Welcome to{" "}
-        <span
-          style={{
-            color: "#f5db41",
-            textShadow: "0px 0px 20px #000",
-          }}
-        >
-          PinguPanel
-        </span>
-      </h1>
-      <div className='saved-connections column gap15'>
-        <div className='saved-connections-header row aic jcsb'>
-          <h3>Saved Connections</h3>
-          <div className='row aic gap5'>
-            <NavLink to='/save-new-connection' className='button yellow'>
-              Save New SSH Connection
-            </NavLink>
-          </div>
+      <fieldset className='box-container column gap15'>
+        <legend className='title'>Saved Connections</legend>
+        <div className='header-buttons w100 row-reverse aic jcsb'>
+          <NavLink to='/save-new-connection' className='button yellow'>
+            Save New SSH Connection
+          </NavLink>
         </div>
-        <div className='saved-connections-list row gap10'>
+        <div className='gridauto gap20'>
           {connections?.map((connection) => (
             <div className='column gap5' key={connection.id}>
               <button
@@ -88,7 +75,7 @@ function HomePage() {
             </div>
           ))}
         </div>
-      </div>
+      </fieldset>
       {/* MODALS */}
       {Object.keys(safeConnection).length > 0 && (
         <EditConnectionModal

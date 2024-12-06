@@ -3,6 +3,7 @@ import createWindow from "./createWindow.js";
 import process from "process";
 import { setupConnectionHandlers } from "../handlers/connectionHandler.js";
 import { setupSSHHandlers } from "../handlers/sshHandler.js";
+import setupSettingsHandlers from "../handlers/settingsHandler.js";
 
 let mainWindow = null;
 
@@ -14,6 +15,7 @@ async function appLifecycle() {
 
     setupConnectionHandlers();
     setupSSHHandlers(mainWindow);
+    setupSettingsHandlers();
 
     app.on("activate", () => {
       if (BrowserWindow.getAllWindows().length === 0) {
