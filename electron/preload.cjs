@@ -15,6 +15,8 @@ contextBridge.exposeInMainWorld("Electron", {
   },
   ssh: {
     // SSH
+    getActiveSSHConnection: () =>
+      ipcRenderer.invoke("get-active-ssh-connection"),
     connectSSH: (connectionData) =>
       ipcRenderer.invoke("connect-ssh", connectionData),
     executeCommand: (command) => ipcRenderer.invoke("execute-command", command),

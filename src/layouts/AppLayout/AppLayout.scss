@@ -1,14 +1,8 @@
 @use "../../variables.scss" as *;
 
 .app-layout {
-  overflow-y: auto;
-  height: calc(100vh - 31px);
-
-  &::-webkit-scrollbar {
-    width: 5px;
-    height: 0px;
-  }
-
+  overflow-y: hidden;
+  height: 100vh;
 
   .box-container {
     padding: 20px;
@@ -23,6 +17,15 @@
     margin-bottom: 10px;
     font-weight: bold;
   }
+
+  .border {
+    border: 1px solid $darkblue !important;
+  }
+
+  .noborder {
+    border: none !important;
+  }
+
 
   .grid3 {
     display: grid;

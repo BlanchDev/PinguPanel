@@ -4,10 +4,12 @@ import PropTypes from "prop-types";
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import ModalTemplate from "../../../../../components/modals/ModalTemplate/ModalTemplate";
+import { useMotion } from "../../../../../layouts/AppLayout/context/Context";
 
 function PassphraseMenu({ passphraseMenu, setPassphraseMenu }) {
   const [passphrase, setPassphrase] = useState("");
   const [loading, setLoading] = useState(false);
+  const { setIsLoginAnimation } = useMotion();
 
   const navigate = useNavigate();
 
@@ -20,14 +22,17 @@ function PassphraseMenu({ passphraseMenu, setPassphraseMenu }) {
       .then(() => {
         setLoading(false);
         setPassphraseMenu({});
-        toast.success("Connection successful");
         setPassphrase("");
-        navigate(`/dashboard/${connectionData.id}`);
+
+        setIsLoginAnimation(true);
+
+        setTimeout(() => {
+          navigate(`/dashboard/${connectionData.id}/dashboard-home`);
+        }, 500);
       })
       .catch((error) => {
         setLoading(false);
         setPassphrase("");
-        console.log(error);
         toast.error(error.message);
       });
   };
@@ -55,7 +60,10 @@ function PassphraseMenu({ passphraseMenu, setPassphraseMenu }) {
             type='password'
             placeholder='Enter passphrase for private key.'
             value={passphrase}
-            onChange={(e) => setPassphrase(e.target.value)}
+            onChange={(e) => {
+              setPassphrase(e.target.value);
+              fetch(`/dashboard/${passphraseMenu.id}`);
+            }}
             required
             autoFocus
           />

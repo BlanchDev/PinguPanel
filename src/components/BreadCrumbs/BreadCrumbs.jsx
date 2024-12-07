@@ -1,22 +1,19 @@
 import { Link, useLocation, useParams } from "react-router-dom";
 import "./BreadCrumbs.scss";
-import { useConnection } from "../../pages/DashboardPage/context/Context";
 
 function BreadCrumbs() {
   const location = useLocation();
   const { connectionId } = useParams();
-  const connectionContext = useConnection();
-  const myConn = connectionContext ? connectionContext.myConn : undefined;
 
-  const pathnames = location.pathname.split("/").filter((x) => x);
+  const pathnames = location.pathname.split("/").filter((pathItem) => pathItem);
 
   const getPageTitle = (path) => {
     switch (path) {
       case "save-new-connection":
         return "Save New SSH Connection";
 
-      case connectionId:
-        return myConn.name;
+      case "dashboard-home":
+        return "Dashboard Home";
 
       case "system-info":
         return "System Info";
@@ -28,15 +25,10 @@ function BreadCrumbs() {
 
   return (
     <div className='bread-crumbs row aic'>
-      {connectionId ? (
-        <div className='bread-crumbs-item'>
-          <Link to={`/dashboard/${connectionId}`}>
-            {getPageTitle(connectionId)}
-          </Link>
-        </div>
-      ) : (
+      {!connectionId && (
         <div className='bread-crumbs-item'>
           <Link to='/'>Home</Link>
+          <span className='separator'>/</span>
         </div>
       )}
 
@@ -50,11 +42,13 @@ function BreadCrumbs() {
 
         return (
           <div key={routeTo} className='bread-crumbs-item'>
-            <span className='separator'>/</span>
             {isLast ? (
               <span className='current'>{getPageTitle(name)}</span>
             ) : (
-              <Link to={routeTo}>{getPageTitle(name)}</Link>
+              <>
+                <Link to={routeTo}>{getPageTitle(name)}</Link>
+                <span className='separator'>/</span>
+              </>
             )}
           </div>
         );
