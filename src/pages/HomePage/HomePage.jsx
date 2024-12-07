@@ -3,11 +3,16 @@ import "./HomePage.scss";
 import { useEffect, useState } from "react";
 import PassphraseMenu from "./components/modals/PassphraseMenu/PassphraseMenu";
 import EditConnectionModal from "./components/modals/EditConnectionModal/EditConnectionModal";
+import { motion } from "framer-motion";
+import { useMotion } from "../../layouts/AppLayout/context/Context";
 
 function HomePage() {
   const [connections, setConnections] = useState([]);
   const [passphraseMenu, setPassphraseMenu] = useState({});
   const [safeConnection, setSafeConnection] = useState({});
+
+  const { isLoginAnimation, isLogoutAnimation, setIsLogoutAnimation } =
+    useMotion();
 
   //TODO: .ENV FILE WARNING MODAL. Users need change the ENCRYPTION_KEY in .env file.
 
@@ -25,8 +30,31 @@ function HomePage() {
     });
   };
 
+  const animation = () => {
+    if (isLoginAnimation) {
+      return {
+        initial: { opacity: 1, y: 0, scale: 1 },
+        animate: { opacity: 0, y: -125, scale: 0.85 },
+        transition: { duration: 0.5, ease: "easeOut" },
+      };
+    }
+
+    if (isLogoutAnimation) {
+      return {
+        initial: { opacity: 0, y: -125, scale: 0.85 },
+        animate: { opacity: 1, y: 0, scale: 1 },
+        transition: { duration: 0.5, ease: "easeOut" },
+        onAnimationComplete: () => {
+          setIsLogoutAnimation(false);
+        },
+      };
+    }
+
+    return {};
+  };
+
   return (
-    <div className='home-page column gap10'>
+    <motion.div className='home-page column gap10' {...animation()}>
       <fieldset className='box-container column gap15'>
         <legend className='title'>Saved Connections</legend>
         <div className='header-buttons w100 row-reverse aic jcsb'>
@@ -89,7 +117,7 @@ function HomePage() {
           setPassphraseMenu={setPassphraseMenu}
         />
       )}
-    </div>
+    </motion.div>
   );
 }
 

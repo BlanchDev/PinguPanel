@@ -5,26 +5,44 @@ import "./App.scss";
 import TopBar from "./components/TopBar/TopBar";
 import DashboardLayout from "./layouts/DashboardLayout/DashboardLayout";
 import AppLayout from "./layouts/AppLayout/AppLayout";
-import DashboardPage from "./pages/DashboardPage/DashboardPage";
-import SystemInfoPage from "./pages/DashboardPage/pages/SystemInfoPage/SystemInfoPage";
+import DashboardHome from "./pages/DashboardHome/DashboardHome";
+import SystemInfoPage from "./pages/DashboardHome/pages/SystemInfoPage/SystemInfoPage";
 import HomePage from "./pages/HomePage/HomePage";
 import SaveNewConnectionPage from "./pages/SaveNewConnectionPage/SaveNewConnectionPage";
+import ManageGlobalAppsPage from "./pages/ManageGlobalAppsPage/ManageGlobalAppsPage";
 
 function App() {
   return (
     <>
       <TopBar />
       <Routes>
+        {/* HOME */}
         <Route path='/' element={<AppLayout />}>
+          {/* HOME PAGES */}
           <Route index element={<HomePage />} />
           <Route
             path='/save-new-connection'
             element={<SaveNewConnectionPage />}
           />
+
+          {/* DASHBOARD */}
           <Route path='/dashboard/:connectionId' element={<DashboardLayout />}>
-            <Route index element={<DashboardPage />} />
-            <Route path='system-info' element={<SystemInfoPage />} />
+            <Route index element={<Navigate to='dashboard-home' />} />
+
+            {/* DASHBOARD PAGES */}
+            <Route path='dashboard-home' element={<DashboardHome />} />
+            <Route
+              path='dashboard-home/system-info'
+              element={<SystemInfoPage />}
+            />
+
+            <Route
+              path='manage-global-apps'
+              element={<ManageGlobalAppsPage />}
+            />
           </Route>
+
+          {/* REDIRECTS */}
           <Route path='*' element={<Navigate to='/' />} />
         </Route>
       </Routes>

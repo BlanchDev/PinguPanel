@@ -46,8 +46,7 @@ async function executeSSHCommand(command) {
     activeConnection.exec(command, async (err, stream) => {
       if (err) {
         console.error("Command execution error:", err);
-        reject(new Error(err.message)); // Changed to reject with an Error
-        return;
+        throw new Error(err.message);
       }
 
       try {
@@ -107,6 +106,21 @@ export function setupSSHHandlers(mainWindow) {
     throw new Error("MainWindow is required for SSH handlers");
   }
 
+  ipcMain.handle("get-active-ssh-connection", async () => {
+    try {
+      if (!activeConnection) {
+        throw new Error("No active connection found");
+      }
+
+      return {
+        success: true,
+      };
+    } catch (error) {
+      console.error("Get connections handler error:", error);
+      return { success: false, message: error.message };
+    }
+  });
+
   ipcMain.handle("connect-ssh", async (_, connectionData) => {
     try {
       if (
@@ -122,7 +136,7 @@ export function setupSSHHandlers(mainWindow) {
       return new Promise((resolve, reject) => {
         const timeout = setTimeout(() => {
           reject(new Error("Connection timeout"));
-        }, 30000); // 30 saniye timeout
+        }, 30_000); // 30 saniye timeout
 
         conn.on("ready", () => {
           clearTimeout(timeout);
@@ -143,7 +157,7 @@ export function setupSSHHandlers(mainWindow) {
           privateKey: connectionData.privateKey,
           passphrase: connectionData.passphrase,
           readyTimeout: 30_000,
-          keepaliveInterval: 10_000,
+          keepaliveInterval: 30_000,
           keepaliveCountMax: 3,
           debug:
             process.env.NODE_ENV === "development" ? console.log : undefined,
