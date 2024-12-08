@@ -4,6 +4,7 @@ import { SystemRequirementsContext } from "./Context";
 
 export function SystemRequirementsProvider({ children }) {
   const [requirements, setRequirements] = useState({
+    distro: null,
     node: { installed: false, version: null },
     npm: { installed: false, version: null },
     pm2: { installed: false, version: null },
@@ -17,6 +18,12 @@ export function SystemRequirementsProvider({ children }) {
     setReqsLoading(true);
     setReqsError(null);
     try {
+      window.Electron.ssh
+        .executeCommand("cat /etc/os-release | grep '^ID=' | cut -d'=' -f2")
+        .then((res) => {
+          setRequirements((prev) => ({ ...prev, distro: res.output.trim() }));
+        });
+
       const checks = {
         node: await window.Electron.ssh.executeCommand("node -v"),
         npm: await window.Electron.ssh.executeCommand("npm -v"),
@@ -34,7 +41,7 @@ export function SystemRequirementsProvider({ children }) {
         };
       }
 
-      setRequirements(results);
+      setRequirements((prev) => ({ ...prev, ...results }));
 
       if (Object.values(results).every((value) => value.installed)) {
         setIsReqsInstalled(true);

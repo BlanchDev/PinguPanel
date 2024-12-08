@@ -9,7 +9,7 @@ import DashboardHome from "./pages/DashboardHome/DashboardHome";
 import SystemInfoPage from "./pages/DashboardHome/pages/SystemInfoPage/SystemInfoPage";
 import HomePage from "./pages/HomePage/HomePage";
 import SaveNewConnectionPage from "./pages/SaveNewConnectionPage/SaveNewConnectionPage";
-import ManageGlobalAppsPage from "./pages/ManageGlobalAppsPage/ManageGlobalAppsPage";
+import ManageGlobalPackagesPage from "./pages/ManageGlobalPackagesPage/ManageGlobalPackagesPage";
 
 function App() {
   return (
@@ -37,8 +37,8 @@ function App() {
             />
 
             <Route
-              path='manage-global-apps'
-              element={<ManageGlobalAppsPage />}
+              path='manage-global-packages/:category'
+              element={<ManageGlobalPackagesPage />}
             />
           </Route>
 

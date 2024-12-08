@@ -33,16 +33,16 @@ function HomePage() {
   const animation = () => {
     if (isLoginAnimation) {
       return {
-        initial: { opacity: 1, y: 0, scale: 1 },
-        animate: { opacity: 0, y: -125, scale: 0.85 },
+        initial: { opacity: 1 },
+        animate: { opacity: 0 },
         transition: { duration: 0.5, ease: "easeOut" },
       };
     }
 
     if (isLogoutAnimation) {
       return {
-        initial: { opacity: 0, y: -125, scale: 0.85 },
-        animate: { opacity: 1, y: 0, scale: 1 },
+        initial: { opacity: 0 },
+        animate: { opacity: 1 },
         transition: { duration: 0.5, ease: "easeOut" },
         onAnimationComplete: () => {
           setIsLogoutAnimation(false);
