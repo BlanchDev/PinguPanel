@@ -27,7 +27,9 @@ function PassphraseMenu({ passphraseMenu, setPassphraseMenu }) {
         setIsLoginAnimation(true);
 
         setTimeout(() => {
-          navigate(`/dashboard/${connectionData.id}/dashboard-home`);
+          navigate(`/dashboard/${connectionData.id}/dashboard-home`, {
+            replace: true,
+          });
         }, 500);
       })
       .catch((error) => {

@@ -1,7 +1,7 @@
-import { useSystemReqs } from "../../context/Context";
+import { usePackageManager } from "../../context/Context";
 
 function JsVersionControl() {
-  const { requirements, reqsLoading } = useSystemReqs();
+  const { requirements, reqsLoading } = usePackageManager();
 
   return (
     <>

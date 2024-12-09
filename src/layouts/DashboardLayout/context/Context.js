@@ -6,5 +6,5 @@ export const useConnection = () => useContext(ConnectionContext);
 export const WebAppsContext = createContext();
 export const useWebApps = () => useContext(WebAppsContext);
 
-export const SystemRequirementsContext = createContext();
-export const useSystemReqs = () => useContext(SystemRequirementsContext);
+export const PackageManagerContext = createContext();
+export const usePackageManager = () => useContext(PackageManagerContext);

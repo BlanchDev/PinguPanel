@@ -23,7 +23,7 @@ function DisconnectConnModal({ modalClose }) {
         setIsLogoutAnimation(true);
         modalClose();
         setTimeout(() => {
-          navigate("/");
+          navigate("/", { replace: true });
         }, 500);
       })
       .catch((error) => {

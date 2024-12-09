@@ -3,7 +3,7 @@ import { useNavigate } from "react-router-dom";
 import { toast } from "react-toastify";
 import {
   useConnection,
-  useSystemReqs,
+  usePackageManager,
 } from "../../layouts/DashboardLayout/context/Context";
 import "./DashboardHome.scss";
 import ConnectionInfo from "./components/ConnectionInfo/ConnectionInfo";
@@ -13,7 +13,7 @@ function DashboardHome() {
   const navigate = useNavigate();
 
   const { myConn, myConnLoading } = useConnection();
-  const { isReqsInstalled, reqsLoading, error } = useSystemReqs();
+  const { isReqsInstalled, reqsLoading, error } = usePackageManager();
 
   useEffect(() => {
     if (!myConn) {
