@@ -1,7 +1,12 @@
 import { motion } from "framer-motion";
 import PropTypes from "prop-types";
+import { usePackageManager } from "../../../../../layouts/DashboardLayout/context/Context";
+import { Link, useParams } from "react-router-dom";
 
 function PM2Packages({ appStatus }) {
+  const { packages } = usePackageManager();
+  const { connectionId } = useParams();
+
   return (
     <motion.div
       className='box-container border column gap25'
@@ -18,6 +23,21 @@ function PM2Packages({ appStatus }) {
           system admin tasks.
         </p>
       </div>
+      {!Object.values(packages?.required || {}).every(
+        (pkg) => pkg.installed,
+      ) && (
+        <div className='need-to-install-required column aic jcc'>
+          <div className='box column aic jcc gap25'>
+            <h4>You need to install the required packages first</h4>
+            <Link
+              to={`/dashboard/${connectionId}/manage-global-packages/required`}
+              className='button green'
+            >
+              Go to required packages
+            </Link>
+          </div>
+        </div>
+      )}
       <div className='gridauto gap20'>
         <fieldset className='box column gap10'>
           <legend className='app-title'>nodejs & npm</legend>
@@ -28,7 +48,7 @@ function PM2Packages({ appStatus }) {
               browser. It is commonly used for server-side programming, building
               web applications, and creating command-line tools.
             </p>
-            {appStatus("node")}
+            {appStatus("pm2", "nodejs")}
           </div>
         </fieldset>
         <fieldset className='box column gap10'>
@@ -40,7 +60,7 @@ function PM2Packages({ appStatus }) {
               alive forever, to reload them without downtime and to facilitate
               common system admin tasks.
             </p>
-            {appStatus("node")}
+            {appStatus("pm2", "pm2")}
           </div>
         </fieldset>
         <fieldset className='box column gap10'>
@@ -52,7 +72,7 @@ function PM2Packages({ appStatus }) {
               from growing too large and ensures that logs are properly archived
               and managed.
             </p>
-            {appStatus("node")}
+            {appStatus("pm2", "pm2-logrotate")}
           </div>
         </fieldset>
 
@@ -65,7 +85,7 @@ function PM2Packages({ appStatus }) {
               files from growing too large and ensures that runtime files are
               properly archived and managed.
             </p>
-            {appStatus("node")}
+            {appStatus("pm2", "pm2-runtime")}
           </div>
         </fieldset>
       </div>

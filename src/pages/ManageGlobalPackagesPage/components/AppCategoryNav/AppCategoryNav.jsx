@@ -4,15 +4,15 @@ import { NavLink, useParams } from "react-router-dom";
 
 function AppCategoryNav() {
   const indicatorRef = useRef(null);
-  const { connectionId } = useParams();
+  const { connectionId, category } = useParams();
 
   useEffect(() => {
     resetIndicator();
-  }, []);
+  }, [category]);
 
   const moveIndicator = (e) => {
-    indicatorRef.current.style.left = `${e.target.offsetLeft}px`;
-    indicatorRef.current.style.width = `${e.target.offsetWidth}px`;
+    indicatorRef.current.style.left = `${e.target?.offsetLeft}px`;
+    indicatorRef.current.style.width = `${e.target?.offsetWidth}px`;
 
     if (e.target.classList.contains("active")) {
       indicatorRef.current.style.borderBottom = `1px solid #6658ff`;
@@ -23,8 +23,8 @@ function AppCategoryNav() {
 
   const resetIndicator = () => {
     const tabButton = document.querySelector(".tab-button.active");
-    indicatorRef.current.style.left = `${tabButton.offsetLeft}px`;
-    indicatorRef.current.style.width = `${tabButton.offsetWidth}px`;
+    indicatorRef.current.style.left = `${tabButton?.offsetLeft}px`;
+    indicatorRef.current.style.width = `${tabButton?.offsetWidth}px`;
   };
 
   return (

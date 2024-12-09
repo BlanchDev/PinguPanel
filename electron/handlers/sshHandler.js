@@ -141,7 +141,7 @@ export function setupSSHHandlers(mainWindow) {
         conn.on("ready", () => {
           clearTimeout(timeout);
           activeConnection = conn;
-          resolve({ success: true, message: "Bağlantı başarılı" });
+          resolve({ success: true, message: "Connected" });
         });
 
         conn.on("error", (err) => {
@@ -222,7 +222,7 @@ export function setupSSHHandlers(mainWindow) {
         activeConnection.end();
         activeConnection = null;
       }
-      return { success: true, message: "Bağlantı kapatıldı" };
+      return { success: true, message: "Disconnected" };
     } catch (error) {
       console.error("Disconnect error:", error);
       return { success: false, message: error.message };
@@ -236,7 +236,7 @@ export function setupSSHHandlers(mainWindow) {
       }
 
       if (!activeConnection) {
-        throw new Error("SSH bağlantısı bulunamadı!");
+        throw new Error("SSH connection not found!");
       }
 
       if (activeStreams.has(streamId)) {

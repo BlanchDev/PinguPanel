@@ -1,6 +1,11 @@
 import { motion } from "framer-motion";
 import PropTypes from "prop-types";
+import { usePackageManager } from "../../../../../layouts/DashboardLayout/context/Context";
+import { Link, useParams } from "react-router-dom";
 function DockerPackages({ appStatus }) {
+  const { packages } = usePackageManager();
+  const { connectionId } = useParams();
+
   return (
     <motion.div
       className='box-container border column gap25'
@@ -17,6 +22,22 @@ function DockerPackages({ appStatus }) {
           scaling of applications.
         </p>
       </div>
+
+      {!Object.values(packages?.required || {}).every(
+        (pkg) => pkg.installed,
+      ) && (
+        <div className='need-to-install-required column aic jcc'>
+          <div className='box column aic jcc gap25'>
+            <h4>You need to install the required packages first</h4>
+            <Link
+              to={`/dashboard/${connectionId}/manage-global-packages/required`}
+              className='button green'
+            >
+              Go to required packages
+            </Link>
+          </div>
+        </div>
+      )}
       <div className='gridauto gap20'>
         <fieldset className='box column gap10'>
           <legend className='app-title'>docker-ce</legend>
@@ -28,7 +49,7 @@ function DockerPackages({ appStatus }) {
               across different systems. It&apos;s the free version of Docker,
               commonly used by developers for building and managing containers.
             </p>
-            {appStatus("node")}
+            {appStatus("docker", "docker-ce")}
           </div>
         </fieldset>
         <fieldset className='box column gap10'>
@@ -40,7 +61,7 @@ function DockerPackages({ appStatus }) {
               Docker Community Edition. It provides commands to interact with
               Docker, such as managing containers, images, and networks.
             </p>
-            {appStatus("node")}
+            {appStatus("docker", "docker-ce-cli")}
           </div>
         </fieldset>
         <fieldset className='box column gap10'>
@@ -53,7 +74,7 @@ function DockerPackages({ appStatus }) {
               Docker and other container platforms to handle container-related
               tasks.
             </p>
-            {appStatus("node")}
+            {appStatus("docker", "containerd.io")}
           </div>
         </fieldset>
       </div>

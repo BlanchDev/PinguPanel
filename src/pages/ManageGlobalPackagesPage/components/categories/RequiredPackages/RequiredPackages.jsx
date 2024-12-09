@@ -26,7 +26,7 @@ function RequiredPackages({ appStatus }) {
               protocol. This ensures that packages are downloaded over more
               secure and encrypted connections.
             </p>
-            {appStatus("node")}
+            {appStatus("required", "apt-transport-https")}
           </div>
         </fieldset>
         <fieldset className='box column gap10'>
@@ -38,7 +38,7 @@ function RequiredPackages({ appStatus }) {
               certificates are necessary for HTTPS connections and secure web
               operations.
             </p>
-            {appStatus("node")}
+            {appStatus("required", "ca-certificates")}
           </div>
         </fieldset>
         <fieldset className='box column gap10'>
@@ -49,7 +49,7 @@ function RequiredPackages({ appStatus }) {
               that can transfer data over a network. It is commonly used for
               downloading files from URLs or interacting with web APIs.
             </p>
-            {appStatus("node")}
+            {appStatus("required", "curl")}
           </div>
         </fieldset>
         <fieldset className='box column gap10'>
@@ -61,7 +61,7 @@ function RequiredPackages({ appStatus }) {
               signatures and is typically required to check the authenticity of
               signed packages when working with secure software repositories.
             </p>
-            {appStatus("node")}
+            {appStatus("required", "gnupg")}
           </div>
         </fieldset>
         <fieldset className='box column gap10'>
@@ -73,7 +73,7 @@ function RequiredPackages({ appStatus }) {
               etc.). It is especially necessary for correctly performing certain
               tasks related to software and package management.
             </p>
-            {appStatus("node")}
+            {appStatus("required", "lsb-release")}
           </div>
         </fieldset>
         <fieldset className='box column gap10'>
@@ -85,7 +85,7 @@ function RequiredPackages({ appStatus }) {
               <span className='highlight'>add-apt-repository</span> command,
               which is used to add third-party repositories.
             </p>
-            {appStatus("node")}
+            {appStatus("required", "software-properties-common")}
           </div>
         </fieldset>
       </div>

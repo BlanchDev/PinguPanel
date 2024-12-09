@@ -1,7 +1,12 @@
 import { motion } from "framer-motion";
 import PropTypes from "prop-types";
+import { Link, useParams } from "react-router-dom";
+import { usePackageManager } from "../../../../../layouts/DashboardLayout/context/Context";
 
 function SSLPackages({ appStatus }) {
+  const { packages } = usePackageManager();
+  const { connectionId } = useParams();
+
   return (
     <motion.div
       className='box-container border column gap25'
@@ -16,6 +21,21 @@ function SSLPackages({ appStatus }) {
           properly.
         </p>
       </div>
+      {!Object.values(packages?.required || {}).every(
+        (pkg) => pkg.installed,
+      ) && (
+        <div className='need-to-install-required column aic jcc'>
+          <div className='box column aic jcc gap25'>
+            <h4>You need to install the required packages first</h4>
+            <Link
+              to={`/dashboard/${connectionId}/manage-global-packages/required`}
+              className='button green'
+            >
+              Go to required packages
+            </Link>
+          </div>
+        </div>
+      )}
       <div className='gridauto gap20'>
         <fieldset className='box column gap10'>
           <legend className='app-title'>cerbot</legend>

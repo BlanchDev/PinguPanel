@@ -1,11 +1,11 @@
 import { Outlet } from "react-router-dom";
 import { ConnectionProvider } from "./context/ConnectionProvider";
 import { WebAppsProvider } from "./context/WebAppsProvider";
-import { SystemRequirementsProvider } from "./context/SystemRequirementsProvider";
 import DashboardLeftBar from "../../pages/DashboardHome/components/DashboardLeftBar/DashboardLeftBar";
 import { motion } from "framer-motion";
 import "./DashboardLayout.scss";
 import { useMotion } from "../AppLayout/context/Context";
+import { PackageManagerProvider } from "./context/PackageManagerProvider";
 
 function DashboardLayout() {
   const { isLoginAnimation, setIsLoginAnimation, isLogoutAnimation } =
@@ -36,8 +36,8 @@ function DashboardLayout() {
 
   return (
     <ConnectionProvider>
-      <WebAppsProvider>
-        <SystemRequirementsProvider>
+      <PackageManagerProvider>
+        <WebAppsProvider>
           <motion.div
             className='dashboard-layout w100 h100 row'
             {...animation()}
@@ -45,8 +45,8 @@ function DashboardLayout() {
             <DashboardLeftBar />
             <Outlet />
           </motion.div>
-        </SystemRequirementsProvider>
-      </WebAppsProvider>
+        </WebAppsProvider>
+      </PackageManagerProvider>
     </ConnectionProvider>
   );
 }

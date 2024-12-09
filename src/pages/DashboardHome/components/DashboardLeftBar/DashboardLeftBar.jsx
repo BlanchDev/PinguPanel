@@ -18,16 +18,16 @@ function DashboardLeftBar() {
     const buttonRect = e.currentTarget.getBoundingClientRect();
     setTooltipPosition(buttonRect.top + 10);
 
-    indicatorRef.current.style.top = `${buttonRect.top}px`;
-    indicatorRef.current.style.height = `${buttonRect.height}px`;
+    indicatorRef.current.style.top = `${buttonRect?.top}px`;
+    indicatorRef.current.style.height = `${buttonRect?.height}px`;
   };
 
   const handleMouseLeave = () => {
     setTooltipPosition(null);
 
     const leftBarButton = document.querySelector(".left-bar-button.active");
-    indicatorRef.current.style.top = `${leftBarButton.offsetTop}px`;
-    indicatorRef.current.style.height = `${leftBarButton.offsetHeight}px`;
+    indicatorRef.current.style.top = `${leftBarButton?.offsetTop}px`;
+    indicatorRef.current.style.height = `${leftBarButton?.offsetHeight}px`;
   };
 
   const renderButton = (icon, tooltip, to) => (

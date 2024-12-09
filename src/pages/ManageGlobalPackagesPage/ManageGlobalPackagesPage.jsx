@@ -1,5 +1,5 @@
 import { useParams } from "react-router-dom";
-import { useSystemReqs } from "../../layouts/DashboardLayout/context/Context";
+import { usePackageManager } from "../../layouts/DashboardLayout/context/Context";
 import AppCategoryNav from "./components/AppCategoryNav/AppCategoryNav";
 import RequiredPackages from "./components/categories/RequiredPackages/RequiredPackages";
 import "./ManageGlobalPackagesPage.scss";
@@ -8,7 +8,7 @@ import PM2Packages from "./components/categories/PM2Packages/PM2Packages";
 import SSLPackages from "./components/categories/SSLPackages/SSLPackages";
 
 function ManageGlobalPackagesPage() {
-  const { requirements, reqsLoading } = useSystemReqs();
+  const { packages, installPackage, uninstallPackage } = usePackageManager();
   const { category } = useParams();
 
   // TODO: Add a check for the Node.js or APP version
@@ -16,26 +16,42 @@ function ManageGlobalPackagesPage() {
   // TODO: MAKE TAB SYSTEM
   // TODO: fail2ban
 
-  const appStatus = (app) => {
-    if (reqsLoading) {
+  console.log(packages);
+
+  const appStatus = (category, app) => {
+    if (packages[category]?.[app]?.loading) {
       return (
-        <div className='row aic jcc gap10'>
+        <div className='w100 column aic gap10'>
           <span className='button yellow w100'>Checking...</span>
         </div>
       );
     }
 
-    if (requirements[app].installed == "fwpoakgwaop") {
+    if (packages[category]?.[app]?.installed) {
       return (
-        <div className='row aic jcc gap10'>
-          <p>Installed {requirements[app].version}</p>
+        <div className='w100 column aic gap10'>
+          <div className='app-status column aic jcc gap5'>
+            <span>Version:{packages[category]?.[app]?.version}</span>
+            <span>Candidate:{packages[category]?.[app]?.candidate}</span>
+          </div>
+          <button
+            className='button red'
+            onClick={() => uninstallPackage(category, app)}
+          >
+            Uninstall
+          </button>
         </div>
       );
     }
 
     return (
-      <div className='w100 row aic gap10'>
-        <button className='button green w100'>Install</button>
+      <div className='w100 column aic gap10'>
+        <button
+          className='button green'
+          onClick={() => installPackage(category, app)}
+        >
+          Install
+        </button>
       </div>
     );
   };
@@ -45,12 +61,12 @@ function ManageGlobalPackagesPage() {
       <AppCategoryNav />
       <div className='box-container column gap10'>
         {category === "all" && (
-          <>
+          <div className='column aic gap50'>
             <RequiredPackages appStatus={appStatus} />
             <DockerPackages appStatus={appStatus} />
             <PM2Packages appStatus={appStatus} />
             <SSLPackages appStatus={appStatus} />
-          </>
+          </div>
         )}
         {category === "required" && <RequiredPackages appStatus={appStatus} />}
         {category === "docker" && <DockerPackages appStatus={appStatus} />}
