@@ -1,7 +1,7 @@
 import { useState, useCallback, useMemo, useEffect } from "react";
 import { toast } from "react-toastify";
 import PropTypes from "prop-types";
-import { ConnectionContext } from "./Context";
+import { ConnectionContext } from "./DashboardLayoutContext";
 import { useParams } from "react-router-dom";
 
 export function ConnectionProvider({ children }) {

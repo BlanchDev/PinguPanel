@@ -1,6 +1,6 @@
 import { useMemo, useState } from "react";
 import PropTypes from "prop-types";
-import { MotionContext } from "./Context";
+import { MotionContext } from "./AppLayoutContext";
 
 function MotionProvider({ children }) {
   const [isLoginAnimation, setIsLoginAnimation] = useState(false);

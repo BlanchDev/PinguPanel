@@ -1,5 +1,5 @@
 import { app, BrowserWindow } from "electron";
-import createWindow from "./createWindow.js";
+import { createSplashWindow, createWindow } from "./createWindow.js";
 import process from "process";
 import { setupConnectionHandlers } from "../handlers/connectionHandler.js";
 import { setupSSHHandlers } from "../handlers/sshHandler.js";
@@ -11,7 +11,17 @@ async function appLifecycle() {
   try {
     await app.whenReady();
 
+    const splashWindow = createSplashWindow();
     mainWindow = createWindow();
+    mainWindow.hide();
+
+    setTimeout(() => {
+      if (!splashWindow.isDestroyed()) {
+        splashWindow.hide();
+        splashWindow.destroy();
+      }
+      mainWindow.show();
+    }, 2000);
 
     setupConnectionHandlers();
     setupSSHHandlers(mainWindow);
@@ -23,7 +33,7 @@ async function appLifecycle() {
       }
     });
   } catch (error) {
-    console.error("Uygulama yaşam döngüsü başlatılamadı:", error);
+    console.error("App Lifecycle Error:", error);
   }
 
   app.on("window-all-closed", () => {

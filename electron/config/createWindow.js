@@ -5,13 +5,37 @@ import { getPath } from "./path.js";
 import settingsStore from "./settingsStore.js";
 import WindowManager from "./windowsManager.js";
 
-function createWindow() {
+export function createSplashWindow() {
+  const splash = new BrowserWindow({
+    width: 250,
+    height: 250,
+    transparent: true,
+    frame: false,
+    alwaysOnTop: true,
+    center: true,
+    icon: join(getPath(), "../assets/icon.ico"),
+    show: true,
+    skipTaskbar: true,
+
+    webPreferences: {
+      nodeIntegration: true,
+      contextIsolation: false,
+    },
+  });
+
+  splash.loadFile(join(getPath(), "../splash.html"));
+  return splash;
+}
+
+export function createWindow() {
   const win = new BrowserWindow({
     width: settingsStore.get("windowSize.width"),
     height: settingsStore.get("windowSize.height"),
     minWidth: 1024,
     minHeight: 576,
+    center: true,
     icon: join(getPath(), "../assets/icon.ico"),
+    show: false,
     webPreferences: {
       sandbox: true,
       nodeIntegration: false,
@@ -72,5 +96,3 @@ function createWindow() {
 
   return win;
 }
-
-export default createWindow;

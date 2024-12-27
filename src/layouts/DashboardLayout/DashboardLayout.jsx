@@ -1,11 +1,12 @@
-import { Outlet } from "react-router-dom";
-import { ConnectionProvider } from "./context/ConnectionProvider";
-import { WebAppsProvider } from "./context/WebAppsProvider";
-import DashboardLeftBar from "../../pages/DashboardHome/components/DashboardLeftBar/DashboardLeftBar";
 import { motion } from "framer-motion";
-import "./DashboardLayout.scss";
-import { useMotion } from "../AppLayout/context/Context";
+import { Outlet } from "react-router-dom";
+import { useMotion } from "../AppLayout/context/AppLayoutContext";
+import DashboardLeftBar from "./components/DashboardLeftBar/DashboardLeftBar";
+import { ConnectionProvider } from "./context/ConnectionProvider";
 import { PackageManagerProvider } from "./context/PackageManagerProvider";
+import { WebAppsProvider } from "./context/WebAppsProvider";
+import "./DashboardLayout.scss";
+import IPTablesProvider from "./pages/SecurityPage/pages/IPTablesPage/context/IPTablesProvider";
 
 function DashboardLayout() {
   const { isLoginAnimation, setIsLoginAnimation, isLogoutAnimation } =
@@ -38,13 +39,12 @@ function DashboardLayout() {
     <ConnectionProvider>
       <PackageManagerProvider>
         <WebAppsProvider>
-          <motion.div
-            className='dashboard-layout w100 h100 row'
-            {...animation()}
-          >
-            <DashboardLeftBar />
-            <Outlet />
-          </motion.div>
+          <IPTablesProvider>
+            <motion.div className='dashboard-layout row' {...animation()}>
+              <DashboardLeftBar />
+              <Outlet />
+            </motion.div>
+          </IPTablesProvider>
         </WebAppsProvider>
       </PackageManagerProvider>
     </ConnectionProvider>

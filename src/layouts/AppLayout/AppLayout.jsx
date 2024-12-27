@@ -17,13 +17,14 @@ function AppLayout() {
       .then((data) => {
         if (data.success) {
           navigate(-2);
+          console.debug(data);
           toast.warning(
             "If you want to connect to another SSH server, please disconnect the current connection.",
           );
         }
       })
       .catch((err) => {
-        console.log(err);
+        console.debug(err);
       });
   }, [location.pathname, navigate]);
 
