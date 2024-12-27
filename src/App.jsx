@@ -3,18 +3,20 @@ import { Bounce, ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import "./App.scss";
 import TopBar from "./components/TopBar/TopBar";
-import DashboardLayout from "./layouts/DashboardLayout/DashboardLayout";
 import AppLayout from "./layouts/AppLayout/AppLayout";
-import DashboardHome from "./pages/DashboardHome/DashboardHome";
-import SystemInfoPage from "./pages/DashboardHome/pages/SystemInfoPage/SystemInfoPage";
-import HomePage from "./pages/HomePage/HomePage";
-import SaveNewConnectionPage from "./pages/SaveNewConnectionPage/SaveNewConnectionPage";
-import ManageGlobalPackagesPage from "./pages/ManageGlobalPackagesPage/ManageGlobalPackagesPage";
+import HomePage from "./layouts/AppLayout/pages/HomePage/HomePage";
+import SaveNewConnectionPage from "./layouts/AppLayout/pages/SaveNewConnectionPage/SaveNewConnectionPage";
+import DashboardLayout from "./layouts/DashboardLayout/DashboardLayout";
+import DashboardHomePage from "./layouts/DashboardLayout/pages/DashboardHomePage/DashboardHomePage";
+import SystemInfoPage from "./layouts/DashboardLayout/pages/DashboardHomePage/pages/SystemInfoPage/SystemInfoPage";
+import ManageGlobalPackagesPage from "./layouts/DashboardLayout/pages/ManageGlobalPackagesPage/ManageGlobalPackagesPage";
+import SecurityPage from "./layouts/DashboardLayout/pages/SecurityPage/SecurityPage";
+import IPTablesPage from "./layouts/DashboardLayout/pages/SecurityPage/pages/IPTablesPage/IPTablesPage";
 
 function App() {
   return (
     <>
-      <TopBar />
+      {window.Electron && <TopBar />}
       <Routes>
         {/* HOME */}
         <Route path='/' element={<AppLayout />}>
@@ -30,16 +32,21 @@ function App() {
             <Route index element={<Navigate to='dashboard-home' />} />
 
             {/* DASHBOARD PAGES */}
-            <Route path='dashboard-home' element={<DashboardHome />} />
+            <Route path='dashboard-home' element={<DashboardHomePage />} />
             <Route
               path='dashboard-home/system-info'
               element={<SystemInfoPage />}
             />
 
+            {/* MANAGE GLOBAL PACKAGES */}
             <Route
               path='manage-global-packages/:category'
               element={<ManageGlobalPackagesPage />}
             />
+
+            {/* SECURITY */}
+            <Route path='security' element={<SecurityPage />} />
+            <Route path='security/iptables' element={<IPTablesPage />} />
           </Route>
 
           {/* REDIRECTS */}

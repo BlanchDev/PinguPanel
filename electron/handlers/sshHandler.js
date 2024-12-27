@@ -39,7 +39,7 @@ function handleStreamData(stream) {
 
 async function executeSSHCommand(command) {
   if (!activeConnection) {
-    throw new Error("SSH bağlantısı bulunamadı!");
+    throw new Error("SSH connection not found!");
   }
 
   return new Promise((resolve, reject) => {
@@ -107,16 +107,25 @@ export function setupSSHHandlers(mainWindow) {
   }
 
   ipcMain.handle("get-active-ssh-connection", async () => {
+    if (!activeConnection) {
+      console.error("Error: No active connection found");
+      return { success: false, message: "No active connection found" };
+    }
+
     try {
-      if (!activeConnection) {
-        throw new Error("No active connection found");
-      }
+      const executeTest = await executeSSHCommand("true");
 
       return {
         success: true,
+        executeTest,
+        data: {
+          host: activeConnection.config.host,
+          port: activeConnection.config.port,
+          username: activeConnection.config.username,
+        },
       };
     } catch (error) {
-      console.error("Get connections handler error:", error);
+      console.error("Error retrieving active connection details:", error);
       return { success: false, message: error.message };
     }
   });

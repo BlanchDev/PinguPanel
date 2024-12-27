@@ -5,16 +5,17 @@ import { toast } from "react-toastify";
 
 function SettingsModal({ modalClose }) {
   const [loading, setLoading] = useState(false);
+
+  const [winSize, setWinSize] = useState({
+    width: 1024,
+    height: 576,
+  });
+
   const [settings, setSettings] = useState({
     windowSize: {
       width: 1024,
       height: 576,
     },
-  });
-
-  const [winSize, setWinSize] = useState({
-    width: 1024,
-    height: 576,
   });
 
   useEffect(() => {
@@ -56,6 +57,21 @@ function SettingsModal({ modalClose }) {
       });
   };
 
+  useEffect(() => {
+    if (
+      (winSize.width == 1024 && winSize.height == 576) ||
+      (winSize.width == 1280 && winSize.height == 720) ||
+      (winSize.width == 1600 && winSize.height == 900)
+    ) {
+      setSettings({
+        windowSize: {
+          width: winSize.width,
+          height: winSize.height,
+        },
+      });
+    }
+  }, [winSize]);
+
   return (
     <ModalTemplate modalClose={modalClose}>
       <form
@@ -71,7 +87,7 @@ function SettingsModal({ modalClose }) {
         <div className='body column aic gap20'>
           <div className='form-item column gap7'>
             <label htmlFor='window-size'>
-              Window Size ({winSize.width}x{winSize.height})
+              Window Size NOW:({winSize.width}x{winSize.height})
             </label>
             <select
               name='window-size'
@@ -87,9 +103,27 @@ function SettingsModal({ modalClose }) {
                 });
               }}
             >
-              <option value='1024x576'>1024x576</option>
-              <option value='1280x720'>1280x720</option>
-              <option value='1600x900'>1600x900</option>
+              <option
+                value='1024x576'
+                selected={winSize.width == 1024 && winSize.height == 576}
+              >
+                1024x576{" "}
+                {winSize.width == 1024 && winSize.height == 576 && "(selected)"}
+              </option>
+              <option
+                value='1280x720'
+                selected={winSize.width == 1280 && winSize.height == 720}
+              >
+                1280x720{" "}
+                {winSize.width == 1280 && winSize.height == 720 && "(selected)"}
+              </option>
+              <option
+                value='1600x900'
+                selected={winSize.width == 1600 && winSize.height == 900}
+              >
+                1600x900{" "}
+                {winSize.width == 1600 && winSize.height == 900 && "(selected)"}
+              </option>
             </select>
           </div>
         </div>

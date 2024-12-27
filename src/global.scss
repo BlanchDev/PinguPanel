@@ -2,7 +2,6 @@
     margin: 0;
     padding: 0;
     box-sizing: border-box;
-    list-style: none;
 
     &::-webkit-scrollbar-thumb {
         background-color: #253f64;
@@ -130,6 +129,10 @@ h6 {
 }
 
 /* flex */
+
+.wrap {
+    flex-wrap: wrap;
+}
 
 $directions: row, column, row-reverse, column-reverse;
 $align-items-values: (

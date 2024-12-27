@@ -1,6 +1,6 @@
 import { useState, useMemo, useEffect } from "react";
 import PropTypes from "prop-types";
-import { useConnection, WebAppsContext } from "./Context";
+import { useConnection, WebAppsContext } from "./DashboardLayoutContext";
 
 export function WebAppsProvider({ children }) {
   const [webAppsDirectory, setWebAppsDirectory] = useState("");

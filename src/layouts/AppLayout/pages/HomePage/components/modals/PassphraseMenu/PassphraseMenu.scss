@@ -1,0 +1,20 @@
+@use "../../../../../../../variables.scss" as *;
+
+.passphrase-menu-content {
+
+  .passphrase-menu-body {
+    width: 100%;
+
+    input {
+      width: calc(100% - 30px);
+      color: rgba(0, 0, 0, 0);
+      -webkit-user-select: none;
+      user-select: none;
+    }
+
+    ::selection {
+      background-color: rgba(0, 0, 0, 0) !important;
+      color: rgba(0, 0, 0, 0) !important;
+    }
+  }
+}

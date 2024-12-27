@@ -1,0 +1,57 @@
+@use "../../../../../../../../variables.scss" as *;
+
+.web-apps-table {
+  width: 100%;
+  border-collapse: collapse;
+  background-color: $dark-bg;
+
+  th,
+  td {
+    border: 1px solid $blue-bg;
+    text-align: center;
+    padding: 10px;
+  }
+
+  tr:has(td:hover) {
+    background-color: $gray-bg;
+    cursor: pointer;
+  }
+
+  tr:has(th) {
+    background-color: $darkblue;
+  }
+
+  th {
+    font-weight: bold;
+  }
+
+  td {
+    font-size: 14px;
+    font-weight: 400;
+  }
+
+  tr:nth-child(even) {
+    background-color: $dark2-bg;
+  }
+
+  .sslStatus {
+    &.no {
+      color: #ff5353;
+      font-weight: bold;
+    }
+  }
+
+  .nginxStatus {
+    &.inactive {
+      color: #ff5353;
+      font-weight: bold;
+    }
+  }
+
+  .pm2Status {
+    &.stopped {
+      color: #ff5353;
+      font-weight: bold;
+    }
+  }
+}

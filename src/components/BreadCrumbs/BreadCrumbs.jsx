@@ -18,6 +18,12 @@ function BreadCrumbs() {
       case "system-info":
         return "System Info";
 
+      case "security":
+        return "Security";
+
+      case "iptables":
+        return "IPTables";
+
       default:
         return path;
     }
