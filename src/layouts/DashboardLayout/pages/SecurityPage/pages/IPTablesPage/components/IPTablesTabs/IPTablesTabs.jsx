@@ -1,8 +1,11 @@
 import PropTypes from "prop-types";
-import { useEffect, useRef } from "react";
+import { useEffect, useRef, useState } from "react";
 import "./IPTablesTabs.scss";
+import { toast } from "react-toastify";
+import FreshStartModal from "./modals/FreshStartModal";
 
 function IPTablesTabs({ currentTab, setActiveTab }) {
+  const [freshStartModal, setFreshStartModal] = useState(false);
   const indicatorRef = useRef(null);
 
   useEffect(() => {
@@ -24,6 +27,21 @@ function IPTablesTabs({ currentTab, setActiveTab }) {
     const tabButton = document.querySelector(".tab-button.active");
     indicatorRef.current.style.left = `${tabButton?.offsetLeft}px`;
     indicatorRef.current.style.width = `${tabButton?.offsetWidth}px`;
+  };
+
+  const handleSave = async () => {
+    try {
+      const result = await window.Electron.ssh.executeCommand(
+        "netfilter-persistent save",
+      );
+      if (result.success) {
+        toast.success("IPTables rules saved successfully");
+      } else {
+        toast.error(result.output);
+      }
+    } catch (error) {
+      toast.error(error.message);
+    }
   };
 
   return (
@@ -48,9 +66,17 @@ function IPTablesTabs({ currentTab, setActiveTab }) {
         </button>
       </div>
       <div className='right-container row aic gap10'>
-        <button className='button green'>SAVE</button>
-        <button className='button red'>HARD RESET</button>
+        <button className='button green' onClick={handleSave}>
+          Save
+        </button>
+        {/* TODO: Docker varsa resetlerken hangi kodları çalıştıracağımızı belirt. Seçim yaptır. nat kuralları silinsin mi silinmesin mi? */}
+        <button className='button red' onClick={() => setFreshStartModal(true)}>
+          Fresh Start
+        </button>
       </div>
+      {freshStartModal && (
+        <FreshStartModal modalClose={() => setFreshStartModal(false)} />
+      )}
     </div>
   );
 }

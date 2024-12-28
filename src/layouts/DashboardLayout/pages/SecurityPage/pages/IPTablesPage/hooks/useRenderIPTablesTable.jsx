@@ -1,13 +1,17 @@
-import useCRUDFilterTable from "./useCRUDFilterTable";
-import upArrow from "../../../../../../../../../assets/tools/up-arrow.png";
-import downArrow from "../../../../../../../../../assets/tools/down-arrow.png";
+import upArrow from "../../../../../../../assets/tools/up-arrow.png";
+import downArrow from "../../../../../../../assets/tools/down-arrow.png";
 import { useState } from "react";
 import { motion } from "framer-motion";
+import { toast } from "react-toastify";
+import useCRUDIPTables from "./useCRUDIPTables";
+import AreYouSureModal from "../../../../../../../components/modals/AreYouSureModal/AreYouSureModal";
 
-function useRenderFilterTable(filterRules) {
+function useRenderIPTablesTable(tableType, tableRules) {
   const [moveLoading, setMoveLoading] = useState(false);
 
-  const { handleMoveRule, handleDeleteRule } = useCRUDFilterTable();
+  const [deleteRuleModal, setDeleteRuleModal] = useState(false);
+
+  const { handleMoveRule, handleDeleteRule } = useCRUDIPTables();
 
   const renderMoveRule = (
     chainName,
@@ -26,6 +30,7 @@ function useRenderFilterTable(filterRules) {
           onClick={() => {
             setMoveLoading(true);
             handleMoveRule(
+              tableType,
               chainName,
               rule,
               ruleNumber,
@@ -43,6 +48,7 @@ function useRenderFilterTable(filterRules) {
           onClick={() => {
             setMoveLoading(true);
             handleMoveRule(
+              tableType,
               chainName,
               rule,
               ruleNumber,
@@ -71,9 +77,14 @@ function useRenderFilterTable(filterRules) {
           key={rule + policyName + "rule" + index}
           className='rule-container row aic gap10'
           layout
-          initial={{ opacity: 0, y: 0 }}
+          initial={{ opacity: 0, y: -3 }}
           animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.3 }}
+          transition={{
+            duration: 0.3,
+            type: "spring",
+            stiffness: 500,
+            damping: 50,
+          }}
         >
           {renderMoveRule(
             policyName,
@@ -89,12 +100,41 @@ function useRenderFilterTable(filterRules) {
             <div className='row aic gap10'>
               <button
                 className='button red'
-                onClick={() => handleDeleteRule(policyName, ruleNumber)}
+                onClick={() => {
+                  setDeleteRuleModal({
+                    chainName: policyName,
+                    ruleNumber,
+                    rule,
+                  });
+                }}
               >
                 Delete {ruleNumber})
               </button>
             </div>
           </div>
+          {deleteRuleModal?.chainName === policyName &&
+            deleteRuleModal?.ruleNumber === ruleNumber && (
+              <AreYouSureModal
+                modalClose={() => setDeleteRuleModal(false)}
+                title={`Delete Rule | ${deleteRuleModal.chainName}`}
+                description={`Are you sure you want to delete rule "${deleteRuleModal.ruleNumber})"? \n\n ${deleteRuleModal.rule}`}
+                buttonText='Delete Rule'
+                handleConfirm={async () => {
+                  try {
+                    await handleDeleteRule(
+                      tableType,
+                      deleteRuleModal.chainName,
+                      deleteRuleModal.ruleNumber,
+                    );
+                    setDeleteRuleModal(false);
+                  } catch (error) {
+                    toast.error(
+                      `An error occurred while deleting rule: ${error.message}`,
+                    );
+                  }
+                }}
+              />
+            )}
         </motion.div>
       );
     });
@@ -103,7 +143,7 @@ function useRenderFilterTable(filterRules) {
   const sortChains = (chains, policyName) => {
     return chains.sort((a, b) => {
       if (policyName === "INPUT") {
-        const inputRules = filterRules.rules
+        const inputRules = tableRules.rules
           .filter((rule) => rule.startsWith("-A INPUT"))
           .map((rule) => rule.split(" -j ")[1]);
 
@@ -137,7 +177,7 @@ function useRenderFilterTable(filterRules) {
 
   const sortSubChains = (subChains, chainName) => {
     return subChains.sort((a, b) => {
-      const parentRules = filterRules.rules
+      const parentRules = tableRules.rules
         .filter((rule) => rule.startsWith(`-A ${chainName}`))
         .map((rule) => rule.split(" -j ")[1]);
 
@@ -152,7 +192,7 @@ function useRenderFilterTable(filterRules) {
   };
 
   const renderSubChains = (chainName) => {
-    const subChains = filterRules.details.chains.filter((subChain) =>
+    const subChains = tableRules.details.chains.filter((subChain) =>
       subChain.parents.some((parent) => parent.name === chainName),
     );
 
@@ -171,7 +211,7 @@ function useRenderFilterTable(filterRules) {
   };
 
   const renderCustomChainDetails = (chainName, type) => {
-    const matchingChains = filterRules.details.chains.filter(
+    const matchingChains = tableRules.details.chains.filter(
       (chain) => chain.name === chainName,
     );
 
@@ -184,7 +224,7 @@ function useRenderFilterTable(filterRules) {
   };
 
   const renderCustomChainRules = (chainName) => {
-    const chain = filterRules.details.chains.find(
+    const chain = tableRules.details.chains.find(
       (chain) => chain.name === chainName,
     );
 
@@ -201,9 +241,8 @@ function useRenderFilterTable(filterRules) {
           key={`${rule.rule}-${chainName}-${index}`}
           className='rule-container row aic gap10'
           layout
-          initial={{ opacity: 0, y: 0 }}
+          initial={{ opacity: 0, y: -3 }}
           animate={{ opacity: 1, y: 0 }}
-          exit={{ opacity: 0, y: 0 }}
           transition={{
             duration: 0.3,
             type: "spring",
@@ -225,12 +264,41 @@ function useRenderFilterTable(filterRules) {
             <div className='row aic gap10'>
               <button
                 className='button red'
-                onClick={() => handleDeleteRule(chainName, ruleNumber)}
+                onClick={() =>
+                  setDeleteRuleModal({
+                    chainName,
+                    ruleNumber,
+                    rule: rule.rule,
+                  })
+                }
               >
                 Delete {ruleNumber})
               </button>
             </div>
           </div>
+          {deleteRuleModal?.chainName === chainName &&
+            deleteRuleModal?.ruleNumber === ruleNumber && (
+              <AreYouSureModal
+                modalClose={() => setDeleteRuleModal(false)}
+                title={`Delete Rule | ${deleteRuleModal.chainName}`}
+                description={`Are you sure you want to delete rule "${deleteRuleModal.ruleNumber})"? \n\n ${deleteRuleModal.rule}`}
+                buttonText='Delete Rule'
+                handleConfirm={async () => {
+                  try {
+                    await handleDeleteRule(
+                      tableType,
+                      deleteRuleModal.chainName,
+                      deleteRuleModal.ruleNumber,
+                    );
+                    setDeleteRuleModal(false);
+                  } catch (error) {
+                    toast.error(
+                      `An error occurred while deleting rule: ${error.message}`,
+                    );
+                  }
+                }}
+              />
+            )}
         </motion.div>
       );
     });
@@ -244,4 +312,4 @@ function useRenderFilterTable(filterRules) {
   };
 }
 
-export default useRenderFilterTable;
+export default useRenderIPTablesTable;

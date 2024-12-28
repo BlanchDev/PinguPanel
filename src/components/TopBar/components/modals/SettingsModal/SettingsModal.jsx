@@ -1,6 +1,6 @@
 import PropTypes from "prop-types";
 import ModalTemplate from "../../../../../components/modals/ModalTemplate/ModalTemplate";
-import { useState, useEffect } from "react";
+import { useState, useEffect, version } from "react";
 import { toast } from "react-toastify";
 
 function SettingsModal({ modalClose }) {
@@ -103,24 +103,15 @@ function SettingsModal({ modalClose }) {
                 });
               }}
             >
-              <option
-                value='1024x576'
-                selected={winSize.width == 1024 && winSize.height == 576}
-              >
+              <option value='1024x576'>
                 1024x576{" "}
                 {winSize.width == 1024 && winSize.height == 576 && "(selected)"}
               </option>
-              <option
-                value='1280x720'
-                selected={winSize.width == 1280 && winSize.height == 720}
-              >
+              <option value='1280x720'>
                 1280x720{" "}
                 {winSize.width == 1280 && winSize.height == 720 && "(selected)"}
               </option>
-              <option
-                value='1600x900'
-                selected={winSize.width == 1600 && winSize.height == 900}
-              >
+              <option value='1600x900'>
                 1600x900{" "}
                 {winSize.width == 1600 && winSize.height == 900 && "(selected)"}
               </option>
@@ -132,6 +123,8 @@ function SettingsModal({ modalClose }) {
             {loading ? "Updating..." : "Update"}
           </button>
         </div>
+
+        <div>React Version: {version}</div>
       </form>
     </ModalTemplate>
   );

@@ -1,8 +1,12 @@
-import useRenderFilterTable from "./hooks/useRenderFilterTable";
-import { useIPTables } from "../../context/IPTablesContext";
+import { motion } from "framer-motion";
 import { useState } from "react";
-import CreateRuleModal from "./modals/CreateRuleModal";
-import AddParentOrChildModal from "./modals/AddParentOrChildModal";
+import { toast } from "react-toastify";
+import AreYouSureModal from "../../../../../../../../components/modals/AreYouSureModal/AreYouSureModal";
+import { useIPTables } from "../../context/IPTablesContext";
+import useCRUDIPTables from "../../hooks/useCRUDIPTables";
+import useRenderIPTablesTable from "../../hooks/useRenderIPTablesTable";
+import AddParentOrChildModal from "../../modals/AddParentOrChildModal";
+import CreateRuleModal from "../../modals/CreateRuleModal";
 
 function FilterTable() {
   //TODO: Filter rule structure
@@ -10,6 +14,7 @@ function FilterTable() {
   //TODO: Create Are You Sure? Modal props: buttonText, message, onConfirm(work with FUNCTION), onCancel
   const [createRuleModal, setCreateRuleModal] = useState(false);
   const [addParentOrChildModal, setAddParentOrChildModal] = useState(false);
+  const [deleteChainModal, setDeleteChainModal] = useState(false);
 
   const { filterRules } = useIPTables();
 
@@ -18,9 +23,9 @@ function FilterTable() {
     renderChains,
     renderCustomChainDetails,
     renderCustomChainRules,
-  } = useRenderFilterTable(filterRules);
+  } = useRenderIPTablesTable("filter", filterRules);
 
-  console.debug(filterRules.details);
+  const { handleDeleteChain } = useCRUDIPTables();
 
   return (
     <div className='filter-table w100 maxContentH column gap50'>
@@ -80,7 +85,6 @@ function FilterTable() {
                           ).length
                         }
                       </h3>
-                      <button className='button purple'>Add Chain</button>
                     </div>
                     <ol className='content column gap10'>
                       {renderChains(filterRules.details.chains, policyName)}
@@ -95,7 +99,10 @@ function FilterTable() {
 
       <div className='box-container noborder column gap10'>
         <div className='row aic gap10'>
-          <h2 className='title yellow-title'>Custom Chains</h2>
+          <h2 className='title yellow-title'>
+            Custom Chains{" | "}
+            {filterRules.customChains.length}
+          </h2>
           <button
             className='button yellow'
             onClick={() =>
@@ -112,12 +119,33 @@ function FilterTable() {
             const chainName = chain.split(" ")[1];
 
             return (
-              <div key={chain + "custom-chain"} className='box column gap10'>
+              <motion.div
+                key={chain + "custom-chain"}
+                className='box column gap10'
+                layout
+                transition={{
+                  duration: 0.3,
+                  type: "spring",
+                  stiffness: 500,
+                  damping: 50,
+                }}
+              >
                 <div className='row aic gap10'>
                   <h3 className='orange-title'>{chainName}</h3>
                   <div className='content'>
                     <p>{chain}</p>
                   </div>
+                  <button
+                    className='button red'
+                    onClick={() =>
+                      setDeleteChainModal({
+                        chainName,
+                        chain,
+                      })
+                    }
+                  >
+                    Delete Chain: {chainName}
+                  </button>
                 </div>
                 <div className='content column gap15'>
                   <div className='grid3'>
@@ -210,7 +238,7 @@ function FilterTable() {
                     </div>
                   </div>
                 </div>
-              </div>
+              </motion.div>
             );
           })}
         </div>
@@ -219,6 +247,7 @@ function FilterTable() {
       {createRuleModal && (
         <CreateRuleModal
           modalClose={() => setCreateRuleModal(false)}
+          tableType='filter'
           ruleType={createRuleModal.ruleType}
           chainName={createRuleModal.chainName}
         />
@@ -226,8 +255,25 @@ function FilterTable() {
       {addParentOrChildModal && (
         <AddParentOrChildModal
           modalClose={() => setAddParentOrChildModal(false)}
+          tableType='filter'
           target={addParentOrChildModal.target}
           chainName={addParentOrChildModal.chainName}
+        />
+      )}
+      {deleteChainModal && (
+        <AreYouSureModal
+          modalClose={() => setDeleteChainModal(false)}
+          title={`Delete Chain: ${deleteChainModal.chainName}`}
+          buttonText='Delete Chain'
+          description={`Are you sure you want to delete this chain? \n\n iptables -F ${deleteChainModal.chainName} \n iptables -X ${deleteChainModal.chainName}`}
+          handleConfirm={async () => {
+            try {
+              await handleDeleteChain("filter", deleteChainModal.chainName);
+              setDeleteChainModal(false);
+            } catch (error) {
+              toast.error(error.message);
+            }
+          }}
         />
       )}
     </div>

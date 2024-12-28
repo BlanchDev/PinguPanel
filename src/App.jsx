@@ -13,6 +13,8 @@ import ManageGlobalPackagesPage from "./layouts/DashboardLayout/pages/ManageGlob
 import SecurityPage from "./layouts/DashboardLayout/pages/SecurityPage/SecurityPage";
 import IPTablesPage from "./layouts/DashboardLayout/pages/SecurityPage/pages/IPTablesPage/IPTablesPage";
 
+//TODO: MYSQL sayfasında otomatik template yap. Örneğin users tablosu için user_id, username, password, email, created_at, updated_at gibi kolonlar oluştur. Bu template seçildiğinde otomatik olarak kolonları oluştursun. Hatta düzenlemek istiyor musun diye sorsun.
+
 function App() {
   return (
     <>
