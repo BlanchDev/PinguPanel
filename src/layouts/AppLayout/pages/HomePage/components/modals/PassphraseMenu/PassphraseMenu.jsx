@@ -40,7 +40,7 @@ function PassphraseMenu({ passphraseMenu, setPassphraseMenu }) {
   };
 
   return (
-    <ModalTemplate modalClose={() => setPassphraseMenu({})}>
+    <ModalTemplate modalClose={() => !loading && setPassphraseMenu({})}>
       <form
         className='modal-content passphrase-menu-content column aic gap20'
         onSubmit={(e) => handleEnterPassphrase(e)}
@@ -51,6 +51,7 @@ function PassphraseMenu({ passphraseMenu, setPassphraseMenu }) {
             className='button red'
             type='button'
             onClick={() => setPassphraseMenu({})}
+            disabled={loading}
           >
             Close
           </button>

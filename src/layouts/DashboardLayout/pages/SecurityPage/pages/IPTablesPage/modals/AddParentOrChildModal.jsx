@@ -1,13 +1,13 @@
 import PropTypes from "prop-types";
 import { useState } from "react";
-import ModalTemplate from "../../../../../../../../../components/modals/ModalTemplate/ModalTemplate";
-import useCRUDFilterTable from "../hooks/useCRUDFilterTable";
+import ModalTemplate from "../../../../../../../components/modals/ModalTemplate/ModalTemplate";
+import useCRUDIPTables from "../hooks/useCRUDIPTables";
 
-function AddParentOrChildModal({ modalClose, target, chainName }) {
+function AddParentOrChildModal({ modalClose, tableType, target, chainName }) {
   const [loading, setLoading] = useState(false);
   const [rule, setRule] = useState("");
 
-  const { handleCreateRule } = useCRUDFilterTable();
+  const { handleCreateRule } = useCRUDIPTables();
 
   const handleSubmitAddParentOrChild = async (e) => {
     e.preventDefault();
@@ -20,13 +20,14 @@ function AddParentOrChildModal({ modalClose, target, chainName }) {
         ? `-A ${rule} -j ${chainName}`
         : `-A ${chainName} -j ${rule}`;
 
-    handleCreateRule(ruleCommand)
-      .then(() => {
+    try {
+      const result = await handleCreateRule(tableType, ruleCommand);
+      if (result) {
         modalClose();
-      })
-      .finally(() => {
-        setLoading(false);
-      });
+      }
+    } finally {
+      setLoading(false);
+    }
   };
 
   return (
@@ -45,17 +46,26 @@ function AddParentOrChildModal({ modalClose, target, chainName }) {
             </div>
             <div className='body column aic gap20'>
               <div className='form-item column gap7'>
-                <label htmlFor='window-size'>Parent Name</label>
+                <label htmlFor='parent-name'>Parent Name</label>
                 <input
                   autoFocus
+                  required
                   type='text'
                   value={rule}
                   onChange={(e) => setRule(e.target.value)}
                   placeholder='INPUT'
+                  id='parent-name'
                 />
-                <code>
-                  iptables -A {rule || "`RULE`"} -j {chainName}
-                </code>
+                {tableType === "filter" && (
+                  <code>
+                    iptables -A {rule || "`RULE`"} -j {chainName}
+                  </code>
+                )}
+                {tableType === "nat" && (
+                  <code>
+                    iptables -t nat -A {rule || "`RULE`"} -j {chainName}
+                  </code>
+                )}
               </div>
             </div>
             <div className='bottom row aic jcc'>
@@ -76,17 +86,26 @@ function AddParentOrChildModal({ modalClose, target, chainName }) {
             </div>
             <div className='body column aic gap20'>
               <div className='form-item column gap7'>
-                <label htmlFor='window-size'>Child Name</label>
+                <label htmlFor='child-name'>Child Name</label>
                 <input
                   autoFocus
+                  required
                   type='text'
                   value={rule}
                   onChange={(e) => setRule(e.target.value)}
                   placeholder='MY_CHILD'
+                  id='child-name'
                 />
-                <code>
-                  iptables -A {chainName} -j {rule || "`RULE`"}
-                </code>
+                {tableType === "filter" && (
+                  <code>
+                    iptables -A {chainName} -j {rule || "`RULE`"}
+                  </code>
+                )}
+                {tableType === "nat" && (
+                  <code>
+                    iptables -t nat -A {chainName} -j {rule || "`RULE`"}
+                  </code>
+                )}
               </div>
             </div>
             <div className='bottom row aic jcc'>
@@ -103,6 +122,7 @@ function AddParentOrChildModal({ modalClose, target, chainName }) {
 
 AddParentOrChildModal.propTypes = {
   modalClose: PropTypes.func.isRequired,
+  tableType: PropTypes.string.isRequired,
   target: PropTypes.string.isRequired,
   chainName: PropTypes.string.isRequired,
 };

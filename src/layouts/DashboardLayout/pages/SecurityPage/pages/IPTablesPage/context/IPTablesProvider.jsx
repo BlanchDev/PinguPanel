@@ -238,15 +238,39 @@ function IPTablesProvider({ children }) {
 
         // NAT table
         const natData = await window.Electron.ssh.executeCommand(
-          "iptables -t nat -L -v --line-numbers",
+          "iptables -t nat -S",
         );
         const natLines = natData.output.split("\n");
 
-        // Docker and other NAT rules
-        const dockerRules = natLines.filter((line) => line.includes("DOCKER"));
-        const otherRules = natLines.filter((line) => !line.includes("DOCKER"));
+        // Kuralları kategorize et
+        const natPolicies = natLines.filter((line) => line.startsWith("-P"));
+        const natCustomChains = natLines.filter((line) =>
+          line.startsWith("-N"),
+        );
+        const natRules = natLines.filter((line) => line.startsWith("-A"));
+        const natReferences = natRules
+          .filter((rule) => {
+            const chainName = rule.split(" ")[3];
+            return rule.endsWith(`-j ${chainName}`);
+          })
+          .map((rule) => {
+            const mainChainName = rule.split(" ")[1];
+            const connectedChainName = rule.split(" ")[3];
 
-        setNatRules({ docker: dockerRules, other: otherRules });
+            return `${mainChainName}:${connectedChainName}`;
+          });
+
+        const natIpTablesChains = parseIptablesRules(natLines);
+
+        const natDetails = getAllChainsAsJson(natIpTablesChains);
+
+        setNatRules({
+          policies: natPolicies,
+          customChains: natCustomChains,
+          rules: natRules,
+          references: natReferences,
+          details: natDetails,
+        });
       } catch (error) {
         console.error("Error fetching rules:", error);
       } finally {
@@ -263,7 +287,6 @@ function IPTablesProvider({ children }) {
       location.pathname === `/dashboard/${params.connectionId}/security`
     ) {
       fetchRules();
-      console.debug(packages["security"].iptables.installed);
     }
   }, [fetchRules, packages, location.pathname, params]);
 
@@ -287,15 +310,7 @@ function IPTablesProvider({ children }) {
       setIsLoading,
       fetchRules,
     }),
-    [
-      activeTab,
-      setActiveTab,
-      filterRules,
-      natRules,
-      isLoading,
-      setIsLoading,
-      fetchRules,
-    ],
+    [activeTab, filterRules, natRules, isLoading, fetchRules],
   );
 
   return (

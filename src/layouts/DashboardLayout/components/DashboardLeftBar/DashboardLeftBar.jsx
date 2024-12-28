@@ -7,15 +7,20 @@ import logoutIcon from "../../../../assets/dashboardLeftBar/logout.png";
 import dockerIcon from "../../../../assets/dashboardLeftBar/docker.png";
 import pm2Icon from "../../../../assets/dashboardLeftBar/pm2.png";
 import "./DashboardLeftBar.scss";
-import DisconnectConnModal from "./components/modals/DisconnectConnModal/DisconnectConnModal";
+import { useMotion } from "../../../AppLayout/context/AppLayoutContext";
+import AreYouSureModal from "../../../../components/modals/AreYouSureModal/AreYouSureModal";
+import { toast } from "react-toastify";
 
 function DashboardLeftBar() {
   const [tooltipPosition, setTooltipPosition] = useState(null);
   const [disconnectModalOpen, setDisconnectModalOpen] = useState(false);
   const indicatorRef = useRef(null);
+
   const { connectionId } = useParams();
   const navigate = useNavigate();
   const location = useLocation();
+
+  const { setIsLogoutAnimation } = useMotion();
 
   const handleMouseEnter = (e) => {
     const buttonRect = e.currentTarget.getBoundingClientRect();
@@ -55,6 +60,24 @@ function DashboardLeftBar() {
       )}
     </button>
   );
+
+  const handleDisconnectConn = async (e) => {
+    e.preventDefault();
+
+    try {
+      const result = await window.Electron.ssh.disconnectSSH();
+
+      setIsLogoutAnimation(true);
+      setTimeout(() => {
+        navigate("/", { replace: true });
+      }, 500);
+
+      return result;
+    } catch (error) {
+      toast.error(`An error occurred while disconnecting: ${error.message}`);
+      return false;
+    }
+  };
 
   return (
     <div className='dashboard-left-bar column aic jcsb'>
@@ -102,7 +125,13 @@ function DashboardLeftBar() {
 
       {/* MODALS */}
       {disconnectModalOpen && (
-        <DisconnectConnModal modalClose={() => setDisconnectModalOpen(false)} />
+        <AreYouSureModal
+          modalClose={() => setDisconnectModalOpen(false)}
+          title='Disconnect Connection'
+          description='Are you sure you want to disconnect this connection?'
+          buttonText='Disconnect'
+          handleConfirm={handleDisconnectConn}
+        />
       )}
     </div>
   );

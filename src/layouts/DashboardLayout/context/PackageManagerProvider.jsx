@@ -83,11 +83,12 @@ export function PackageManagerProvider({ children }) {
           "sudo apt-cache policy software-properties-common | grep -E 'Installed|Candidate' | awk '{print $2}' | paste -sd ' ' -",
       },
       docker: {
-        GPG: `test -d /etc/apt/keyrings && \
-        test -f /etc/apt/keyrings/docker.gpg && \
+        GPG: `
+        test -d /etc/apt/keyrings &&
+        test -f /etc/apt/keyrings/docker.gpg &&
         echo 'Exists'`,
-        repository: `test -f /etc/apt/sources.list.d/docker.list && \
-        echo 'Exists'`,
+        repository: `
+        test -f /etc/apt/sources.list.d/docker.list && echo 'Exists'`,
         "docker-ce":
           "sudo apt-cache policy docker-ce | grep -E 'Installed|Candidate' | awk '{print $2}' | paste -sd ' ' -",
         "docker-ce-cli":
@@ -201,16 +202,18 @@ export function PackageManagerProvider({ children }) {
     () => ({
       docker: {
         GPG: {
-          install: `sudo install -m 0755 -d /etc/apt/keyrings && \
-            curl -fsSL https://download.docker.com/linux/${distro}/gpg | sudo gpg --dearmor --yes -o /etc/apt/keyrings/docker.gpg && \
+          install: `
+            sudo install -m 0755 -d /etc/apt/keyrings
+            curl -fsSL https://download.docker.com/linux/${distro}/gpg | sudo gpg --dearmor --yes -o /etc/apt/keyrings/docker.gpg
             sudo chmod a+r /etc/apt/keyrings/docker.gpg`,
           uninstall: `
-            sudo rm -rf /etc/apt/keyrings/docker.gpg --force && \
+            sudo rm -rf /etc/apt/keyrings/docker.gpg --force
             sudo rm -rf /etc/apt/trusted.gpg.d/docker.gpg --force
           `,
         },
         repository: {
-          install: `echo "deb [arch=$(dpkg --print-architecture) signed-by=/etc/apt/keyrings/docker.gpg] https://download.docker.com/linux/${distro} $(lsb_release -cs) stable" | sudo tee /etc/apt/sources.list.d/docker.list > /dev/null 2>&1`,
+          install: `
+          echo "deb [arch=$(dpkg --print-architecture) signed-by=/etc/apt/keyrings/docker.gpg] https://download.docker.com/linux/${distro} $(lsb_release -cs) stable" | sudo tee /etc/apt/sources.list.d/docker.list > /dev/null 2>&1`,
           uninstall: `sudo rm -f /etc/apt/sources.list.d/docker.list --force`,
         },
       },
@@ -222,12 +225,14 @@ export function PackageManagerProvider({ children }) {
       },
       security: {
         ufw: {
-          install: `sudo systemctl start ufw --force && \
-            sudo systemctl enable ufw --force && \
-            sudo ufw --force enable`,
-          uninstall: `sudo systemctl stop ufw --force && \
-            sudo systemctl disable ufw --force && \
-            sudo ufw disable --force`,
+          install: `
+          sudo systemctl start ufw --force
+          sudo systemctl enable ufw --force
+          sudo ufw --force enable`,
+          uninstall: `
+          sudo systemctl stop ufw --force
+          sudo systemctl disable ufw --force
+          sudo ufw disable --force`,
         },
       },
     }),

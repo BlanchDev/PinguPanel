@@ -2,39 +2,26 @@ import "./TopBar.scss";
 import logo from "../../assets/penguin.png";
 import settings from "../../assets/settings.png";
 import SettingsModal from "./components/modals/SettingsModal/SettingsModal";
-import { useState, useEffect } from "react";
+import { useState, useEffect, useCallback } from "react";
 import { useLocation, useNavigate } from "react-router-dom";
 import { toast } from "react-toastify";
 
 function TopBar() {
   const [isConnected, setIsConnected] = useState(false);
   const [showSettingsModal, setShowSettingsModal] = useState(false);
+  const [timer, setTimer] = useState(0);
 
   const location = useLocation();
   const navigate = useNavigate();
 
-  useEffect(() => {
-    const checkConnection = async () => {
-      try {
-        const data = await window.Electron.ssh.getActiveSSHConnection();
+  const checkConnection = useCallback(async () => {
+    try {
+      const data = await window.Electron.ssh.getActiveSSHConnection();
 
-        if (data.success) {
-          setIsConnected(true);
-        } else {
-          setIsConnected(false);
-          window.Electron.ssh
-            .disconnectSSH()
-            .then(() => {
-              navigate("/", { replace: true });
-            })
-            .catch((error) => {
-              toast.error(`An error occurred: ${error.message}`);
-            });
-        }
-      } catch (error) {
-        console.error("Error checking SSH connection:", error);
+      if (data.success) {
+        setIsConnected(true);
+      } else {
         setIsConnected(false);
-
         window.Electron.ssh
           .disconnectSSH()
           .then(() => {
@@ -44,14 +31,30 @@ function TopBar() {
             toast.error(`An error occurred: ${error.message}`);
           });
       }
-    };
+    } catch (error) {
+      console.error("Error checking SSH connection:", error);
+      setIsConnected(false);
 
-    let timer = 0;
+      window.Electron.ssh
+        .disconnectSSH()
+        .then(() => {
+          navigate("/", { replace: true });
+        })
+        .catch((error) => {
+          toast.error(`An error occurred: ${error.message}`);
+        });
+    }
+  }, [navigate, setIsConnected]);
 
+  useEffect(() => {
     if (location.pathname.includes("dashboard")) {
-      timer = 3_000;
+      if (!isConnected) {
+        checkConnection();
+      }
+
+      setTimer(5_000);
     } else {
-      timer = 3_000_000;
+      setTimer(3_000_000);
     }
 
     if (location.pathname === "/") {
@@ -60,7 +63,7 @@ function TopBar() {
 
     const intervalId = setInterval(checkConnection, timer);
     return () => clearInterval(intervalId);
-  }, [navigate, isConnected, location.pathname]);
+  }, [location.pathname, checkConnection, isConnected, timer]);
 
   return (
     <div className='electron-top-bar row aic jcsb gap7'>
