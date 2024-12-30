@@ -11,6 +11,8 @@ function FreshStartModal({ modalClose }) {
   const [isFilterRules, setIsFilterRules] = useState(true);
   const [isNatRules, setIsNatRules] = useState(true);
   const [isMangleRules, setIsMangleRules] = useState(true);
+  const [isRawRules, setIsRawRules] = useState(true);
+  const [isSecurityRules, setIsSecurityRules] = useState(true);
 
   const { myConn } = useConnection();
   const { fetchRules } = useIPTables();
@@ -66,6 +68,18 @@ function FreshStartModal({ modalClose }) {
       iptables -t mangle -X`;
     }
 
+    if (isRawRules) {
+      command += `
+      iptables -t raw -F
+      iptables -t raw -X`;
+    }
+
+    if (isSecurityRules) {
+      command += `
+      iptables -t security -F
+      iptables -t security -X`;
+    }
+
     try {
       const result = await window.Electron.ssh.executeCommand(command);
 
@@ -100,8 +114,11 @@ function FreshStartModal({ modalClose }) {
           </button>
         </div>
         <div className='body column aic gap20'>
-          <div className='form-item column gap20'>
-            <p>Choose what you want to reset</p>
+          <div className='form-item column aic gap20'>
+            <p>
+              Choose what you want to reset. Fresh Start automatically adds some
+              basic rules.
+            </p>
             <div className='maxContentW column aic gap15'>
               <div className='form-item row aic gap5'>
                 <input
@@ -134,6 +151,28 @@ function FreshStartModal({ modalClose }) {
                 />
                 <label htmlFor='mangle-rules' className='row aic'>
                   Mangle Rules
+                </label>
+              </div>
+              <div className='form-item row aic gap5'>
+                <input
+                  type='checkbox'
+                  id='raw-rules'
+                  checked={isRawRules}
+                  onChange={() => setIsRawRules(!isRawRules)}
+                />
+                <label htmlFor='raw-rules' className='row aic'>
+                  Raw Rules
+                </label>
+              </div>
+              <div className='form-item row aic gap5'>
+                <input
+                  type='checkbox'
+                  id='security-rules'
+                  checked={isSecurityRules}
+                  onChange={() => setIsSecurityRules(!isSecurityRules)}
+                />
+                <label htmlFor='security-rules' className='row aic'>
+                  Security Rules
                 </label>
               </div>
               <div className='form-item row aic gap5'>

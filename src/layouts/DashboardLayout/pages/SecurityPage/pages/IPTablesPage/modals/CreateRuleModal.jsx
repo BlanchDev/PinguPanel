@@ -60,6 +60,21 @@ function CreateRuleModal({ modalClose, tableType, ruleType, chainName }) {
                     iptables -t nat -A {chainName} {rule || "`RULE`"}
                   </code>
                 )}
+                {tableType === "mangle" && (
+                  <code>
+                    iptables -t mangle -A {chainName} {rule || "`RULE`"}
+                  </code>
+                )}
+                {tableType === "raw" && (
+                  <code>
+                    iptables -t raw -A {chainName} {rule || "`RULE`"}
+                  </code>
+                )}
+                {tableType === "security" && (
+                  <code>
+                    iptables -t security -A {chainName} {rule || "`RULE`"}
+                  </code>
+                )}
               </div>
             </div>
             <div className='bottom row aic jcc'>
@@ -94,6 +109,15 @@ function CreateRuleModal({ modalClose, tableType, ruleType, chainName }) {
                 )}
                 {tableType === "nat" && (
                   <code>iptables -t nat -N {rule || "`RULE`"}</code>
+                )}
+                {tableType === "mangle" && (
+                  <code>iptables -t mangle -N {rule || "`RULE`"}</code>
+                )}
+                {tableType === "raw" && (
+                  <code>iptables -t raw -N {rule || "`RULE`"}</code>
+                )}
+                {tableType === "security" && (
+                  <code>iptables -t security -N {rule || "`RULE`"}</code>
                 )}
               </div>
             </div>

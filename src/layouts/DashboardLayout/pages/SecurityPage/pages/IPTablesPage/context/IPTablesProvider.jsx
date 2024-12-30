@@ -14,8 +14,32 @@ function IPTablesProvider({ children }) {
     details: [],
   });
   const [natRules, setNatRules] = useState({
-    docker: [],
-    other: [],
+    policies: [],
+    customChains: [],
+    rules: [],
+    references: [],
+    details: [],
+  });
+  const [mangleRules, setMangleRules] = useState({
+    policies: [],
+    customChains: [],
+    rules: [],
+    references: [],
+    details: [],
+  });
+  const [rawRules, setRawRules] = useState({
+    policies: [],
+    customChains: [],
+    rules: [],
+    references: [],
+    details: [],
+  });
+  const [securityRules, setSecurityRules] = useState({
+    policies: [],
+    customChains: [],
+    rules: [],
+    references: [],
+    details: [],
   });
   const [isLoading, setIsLoading] = useState(false);
 
@@ -206,13 +230,12 @@ function IPTablesProvider({ children }) {
       setIsLoading(loading);
 
       try {
-        // Filter tablosu kurallarını al
+        // Filter Table
         const filterData = await window.Electron.ssh.executeCommand(
           "iptables -S",
         );
         const filterLines = filterData.output.split("\n");
 
-        // Kuralları kategorize et
         const policies = filterLines.filter((line) => line.startsWith("-P"));
         const customChains = filterLines.filter((line) =>
           line.startsWith("-N"),
@@ -235,14 +258,14 @@ function IPTablesProvider({ children }) {
         const details = getAllChainsAsJson(IpTablesChains);
 
         setFilterRules({ policies, customChains, rules, references, details });
+        // END Filter Table
 
-        // NAT table
+        // NAT Table
         const natData = await window.Electron.ssh.executeCommand(
           "iptables -t nat -S",
         );
         const natLines = natData.output.split("\n");
 
-        // Kuralları kategorize et
         const natPolicies = natLines.filter((line) => line.startsWith("-P"));
         const natCustomChains = natLines.filter((line) =>
           line.startsWith("-N"),
@@ -271,6 +294,121 @@ function IPTablesProvider({ children }) {
           references: natReferences,
           details: natDetails,
         });
+        // END NAT Table
+
+        // Mangle Table
+        const mangleData = await window.Electron.ssh.executeCommand(
+          "iptables -t mangle -S",
+        );
+        const mangleLines = mangleData.output.split("\n");
+
+        const manglePolicies = mangleLines.filter((line) =>
+          line.startsWith("-P"),
+        );
+        const mangleCustomChains = mangleLines.filter((line) =>
+          line.startsWith("-N"),
+        );
+        const mangleRules = mangleLines.filter((line) => line.startsWith("-A"));
+        const mangleReferences = mangleRules
+          .filter((rule) => {
+            const chainName = rule.split(" ")[3];
+            return rule.endsWith(`-j ${chainName}`);
+          })
+          .map((rule) => {
+            const mainChainName = rule.split(" ")[1];
+            const connectedChainName = rule.split(" ")[3];
+
+            return `${mainChainName}:${connectedChainName}`;
+          });
+
+        const mangleIpTablesChains = parseIptablesRules(mangleLines);
+
+        const mangleDetails = getAllChainsAsJson(mangleIpTablesChains);
+
+        setMangleRules({
+          policies: manglePolicies,
+          customChains: mangleCustomChains,
+          rules: mangleRules,
+          references: mangleReferences,
+          details: mangleDetails,
+        });
+        // END Mangle Table
+
+        // RAW Table
+        const rawData = await window.Electron.ssh.executeCommand(
+          "iptables -t raw -S",
+        );
+        const rawLines = rawData.output.split("\n");
+
+        const rawPolicies = rawLines.filter((line) => line.startsWith("-P"));
+        const rawCustomChains = rawLines.filter((line) =>
+          line.startsWith("-N"),
+        );
+        const rawRules = rawLines.filter((line) => line.startsWith("-A"));
+        const rawReferences = rawRules
+          .filter((rule) => {
+            const chainName = rule.split(" ")[3];
+            return rule.endsWith(`-j ${chainName}`);
+          })
+          .map((rule) => {
+            const mainChainName = rule.split(" ")[1];
+            const connectedChainName = rule.split(" ")[3];
+
+            return `${mainChainName}:${connectedChainName}`;
+          });
+
+        const rawIpTablesChains = parseIptablesRules(rawLines);
+
+        const rawDetails = getAllChainsAsJson(rawIpTablesChains);
+
+        setRawRules({
+          policies: rawPolicies,
+          customChains: rawCustomChains,
+          rules: rawRules,
+          references: rawReferences,
+          details: rawDetails,
+        });
+        // END RAW Table
+
+        //  Security Table
+        const securityData = await window.Electron.ssh.executeCommand(
+          "iptables -t security -S",
+        );
+        const securityLines = securityData.output.split("\n");
+
+        const securityPolicies = securityLines.filter((line) =>
+          line.startsWith("-P"),
+        );
+        const securityCustomChains = securityLines.filter((line) =>
+          line.startsWith("-N"),
+        );
+        const securityRules = securityLines.filter((line) =>
+          line.startsWith("-A"),
+        );
+        const securityReferences = securityRules
+          .filter((rule) => {
+            const chainName = rule.split(" ")[3];
+            return rule.endsWith(`-j ${chainName}`);
+          })
+          .map((rule) => {
+            const mainChainName = rule.split(" ")[1];
+            const connectedChainName = rule.split(" ")[3];
+
+            return `${mainChainName}:${connectedChainName}`;
+          });
+
+        const securityIpTablesChains = parseIptablesRules(securityLines);
+
+        const securityDetails = getAllChainsAsJson(securityIpTablesChains);
+
+        setSecurityRules({
+          policies: securityPolicies,
+          customChains: securityCustomChains,
+          rules: securityRules,
+          references: securityReferences,
+          details: securityDetails,
+        });
+        // END Security Table
       } catch (error) {
         console.error("Error fetching rules:", error);
       } finally {
@@ -306,11 +444,23 @@ function IPTablesProvider({ children }) {
       setActiveTab,
       filterRules,
       natRules,
+      mangleRules,
+      rawRules,
+      securityRules,
       isLoading,
       setIsLoading,
       fetchRules,
     }),
-    [activeTab, filterRules, natRules, isLoading, fetchRules],
+    [
+      activeTab,
+      filterRules,
+      natRules,
+      mangleRules,
+      rawRules,
+      securityRules,
+      isLoading,
+      fetchRules,
+    ],
   );
 
   return (

@@ -3,17 +3,12 @@ import { useNavigate } from "react-router-dom";
 import { toast } from "react-toastify";
 import "./DashboardHomePage.scss";
 import ConnectionInfo from "./components/ConnectionInfo/ConnectionInfo";
-import WebApps from "./components/WebApps/WebApps";
-import {
-  useConnection,
-  usePackageManager,
-} from "../../context/DashboardLayoutContext";
+import { useConnection } from "../../context/DashboardLayoutContext";
 
 function DashboardHomePage() {
   const navigate = useNavigate();
 
-  const { myConn, myConnLoading } = useConnection();
-  const { isReqsInstalled, reqsLoading, error } = usePackageManager();
+  const { myConn } = useConnection();
 
   useEffect(() => {
     if (!myConn) {
@@ -29,15 +24,6 @@ function DashboardHomePage() {
         });
     }
   }, [navigate, myConn]);
-
-  /*if (myConnLoading) {
-    return (
-      <div className='dashboard-home column aic jcc gap25'>
-        <div className='loading-spinner' />
-        <p>Loading...</p>
-      </div>
-    );
-  }*/
 
   if (!myConn) {
     return (
@@ -63,50 +49,20 @@ function DashboardHomePage() {
     );
   }
 
-  const renderWebApps = () => {
-    if (error) {
-      return (
-        <fieldset className='box column gap10'>
-          <legend className='title yellow-title'>Web Apps</legend>
-          <div className='content column aic jcc'>
-            <p>System requirements check failed: {error}</p>
-          </div>
-        </fieldset>
-      );
-    }
-
-    if (reqsLoading) {
-      return (
-        <fieldset className='box column gap10'>
-          <legend className='title yellow-title'>Web Apps</legend>
-          <div className='content column aic jcc gap25'>
-            <div className='loading-spinner' />
-            <p>Checking system requirements...</p>
-          </div>
-        </fieldset>
-      );
-    }
-
-    return isReqsInstalled ? (
-      <WebApps />
-    ) : (
-      <fieldset className='box column gap10'>
-        <legend className='title yellow-title'>Web Apps</legend>
-        <div className='content column aic jcc gap25'>
-          <p>
-            System requirements not installed! Node.js, NPM, PM2 and Nginx are
-            required.
-          </p>
-        </div>
-      </fieldset>
-    );
-  };
-
   return (
     <div className='dashboard-home-page dashboard-layout-page column gap20'>
       <div className='box-container noborder column gap10'>
         <div className='grid3'>
           <ConnectionInfo />
+          <fieldset className='box column gap10'>
+            <legend className='title yellow-title'>Configuration</legend>
+            <div className='content column gap10'>
+              <fieldset>
+                <legend>Fast Actions</legend>
+                <button className='button blue'>sshd_config</button>
+              </fieldset>
+            </div>
+          </fieldset>
         </div>
       </div>
     </div>

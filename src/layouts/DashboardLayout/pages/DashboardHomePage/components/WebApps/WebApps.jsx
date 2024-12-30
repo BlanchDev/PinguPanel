@@ -1,4 +1,4 @@
-import { useState, useEffect } from "react";
+import { useState } from "react";
 import "./WebApps.scss";
 import CreateNewWebApp from "./components/modals/CreateNewWebApp/CreateNewWebApp";
 import SelectDirectory from "./components/modals/SelectDirectory/SelectDirectory";
@@ -11,18 +11,8 @@ function WebApps() {
   const [selectedDirectoryModalOpen, setSelectedDirectoryModalOpen] =
     useState(false);
 
-  const {
-    webAppsDirectory,
-    myConnLoading,
-    myWebAppsLoading,
-    setMyWebAppsLoading,
-  } = useWebApps();
-
-  useEffect(() => {
-    if (!webAppsDirectory) {
-      setMyWebAppsLoading(false);
-    }
-  }, [webAppsDirectory, setMyWebAppsLoading]);
+  const { webAppsDirectory, myConnLoading, myWebAppsLoading, fetchSites } =
+    useWebApps();
 
   return (
     <>
@@ -36,7 +26,16 @@ function WebApps() {
         </fieldset>
       ) : (
         <fieldset className='box column gap25'>
-          <legend className='title yellow-title'>Web Apps</legend>
+          <legend className='title yellow-title'>
+            Web Apps{" "}
+            <button
+              className='button yellow'
+              onClick={fetchSites}
+              disabled={myWebAppsLoading}
+            >
+              Refresh
+            </button>
+          </legend>
           <div className='row aic jcsb'>
             <button
               className='button purple'

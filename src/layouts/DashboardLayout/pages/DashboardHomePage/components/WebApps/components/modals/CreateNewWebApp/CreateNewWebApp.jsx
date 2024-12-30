@@ -7,8 +7,7 @@ import ModalTemplate from "../../../../../../../../../components/modals/ModalTem
 function CreateNewWebApp({ modalClose }) {
   const [projectName, setProjectName] = useState("");
   const [loading, setLoading] = useState(false);
-  const { webAppsDirectory, setMyWebAppsLoading, refreshWebApps } =
-    useWebApps();
+  const { webAppsDirectory, fetchSites } = useWebApps();
 
   const handleCreateNewWebApp = async (e) => {
     e.preventDefault();
@@ -30,8 +29,7 @@ function CreateNewWebApp({ modalClose }) {
 
       if (result.success) {
         toast.success("Web app created successfully!");
-        setMyWebAppsLoading(true);
-        refreshWebApps();
+        fetchSites();
         modalClose();
       } else {
         toast.error(`Failed to create web app: ${result.error}`);
