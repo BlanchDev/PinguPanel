@@ -226,8 +226,10 @@ body {
     cursor: pointer;
 
     &:checked {
-      background: rgb(0, 0, 0);
-      background: radial-gradient(circle, rgba(0, 0, 0, 1) 0%, rgba(62, 166, 20, 1) 80%);
+      background: rgb(73, 189, 44);
+      background: radial-gradient(circle, rgba(73, 189, 44, 1) 0%, rgba(1, 4, 7, 1) 55%);
+      border: 1px solid #577139;
+      filter: drop-shadow(0 0 3px #445a2b);
     }
   }
 }

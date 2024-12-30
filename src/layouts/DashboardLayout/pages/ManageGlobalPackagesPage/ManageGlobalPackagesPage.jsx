@@ -10,7 +10,7 @@ import SecurityPackages from "./components/categories/SecurityPackages/SecurityP
 
 function ManageGlobalPackagesPage() {
   const { packages, installPackage, uninstallPackage } = usePackageManager();
-  const { category } = useParams();
+  const { packageCategory } = useParams();
 
   // TODO: Add a check for the Node.js or APP version
   // TODO: NGINX and Apache, CERBOT
@@ -94,8 +94,8 @@ function ManageGlobalPackagesPage() {
   return (
     <div className='manage-global-packages-page dashboard-layout-page column'>
       <PackageCategoryNav />
-      <div className='column gap10'>
-        {category === "all" && (
+      <div className='box column gap10'>
+        {packageCategory === "all-packages" && (
           <div className='column aic gap50'>
             <RequiredPackages appStatus={appStatus} />
             <DockerPackages appStatus={appStatus} />
@@ -104,11 +104,21 @@ function ManageGlobalPackagesPage() {
             <SecurityPackages appStatus={appStatus} />
           </div>
         )}
-        {category === "required" && <RequiredPackages appStatus={appStatus} />}
-        {category === "docker" && <DockerPackages appStatus={appStatus} />}
-        {category === "pm2" && <PM2Packages appStatus={appStatus} />}
-        {category === "ssl" && <SSLPackages appStatus={appStatus} />}
-        {category === "security" && <SecurityPackages appStatus={appStatus} />}
+        {packageCategory === "required-packages" && (
+          <RequiredPackages appStatus={appStatus} />
+        )}
+        {packageCategory === "docker-packages" && (
+          <DockerPackages appStatus={appStatus} />
+        )}
+        {packageCategory === "pm2-packages" && (
+          <PM2Packages appStatus={appStatus} />
+        )}
+        {packageCategory === "ssl-packages" && (
+          <SSLPackages appStatus={appStatus} />
+        )}
+        {packageCategory === "security-packages" && (
+          <SecurityPackages appStatus={appStatus} />
+        )}
       </div>
     </div>
   );

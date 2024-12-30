@@ -22,6 +22,18 @@ function useCRUDIPTables() {
         deleteRuleCommand = `iptables -t nat -D ${chain} ${ruleNumber}`;
         break;
 
+      case "mangle":
+        deleteRuleCommand = `iptables -t mangle -D ${chain} ${ruleNumber}`;
+        break;
+
+      case "raw":
+        deleteRuleCommand = `iptables -t raw -D ${chain} ${ruleNumber}`;
+        break;
+
+      case "security":
+        deleteRuleCommand = `iptables -t security -D ${chain} ${ruleNumber}`;
+        break;
+
       default:
         return false;
     }
@@ -47,6 +59,18 @@ function useCRUDIPTables() {
 
         case "nat":
           insertRuleCommand = `iptables -t nat -I ${chain} ${desiredIndex} ${pureRule}`;
+          break;
+
+        case "mangle":
+          insertRuleCommand = `iptables -t mangle -I ${chain} ${desiredIndex} ${pureRule}`;
+          break;
+
+        case "raw":
+          insertRuleCommand = `iptables -t raw -I ${chain} ${desiredIndex} ${pureRule}`;
+          break;
+
+        case "security":
+          insertRuleCommand = `iptables -t security -I ${chain} ${desiredIndex} ${pureRule}`;
           break;
 
         default:
@@ -90,6 +114,18 @@ function useCRUDIPTables() {
         createRuleCommand = `iptables -t nat ${ruleCommand}`;
         break;
 
+      case "mangle":
+        createRuleCommand = `iptables -t mangle ${ruleCommand}`;
+        break;
+
+      case "raw":
+        createRuleCommand = `iptables -t raw ${ruleCommand}`;
+        break;
+
+      case "security":
+        createRuleCommand = `iptables -t security ${ruleCommand}`;
+        break;
+
       default:
         return false;
     }
@@ -125,6 +161,18 @@ function useCRUDIPTables() {
 
       case "nat":
         deleteRuleCommand = `iptables -t nat -D ${chain} ${ruleNumber}`;
+        break;
+
+      case "mangle":
+        deleteRuleCommand = `iptables -t mangle -D ${chain} ${ruleNumber}`;
+        break;
+
+      case "raw":
+        deleteRuleCommand = `iptables -t raw -D ${chain} ${ruleNumber}`;
+        break;
+
+      case "security":
+        deleteRuleCommand = `iptables -t security -D ${chain} ${ruleNumber}`;
         break;
 
       default:
@@ -168,6 +216,24 @@ function useCRUDIPTables() {
         iptables -t nat -X ${chainName}`;
         break;
 
+      case "mangle":
+        deleteChainCommand = `
+        iptables -t mangle -F ${chainName}
+        iptables -t mangle -X ${chainName}`;
+        break;
+
+      case "raw":
+        deleteChainCommand = `
+        iptables -t raw -F ${chainName}
+        iptables -t raw -X ${chainName}`;
+        break;
+
+      case "security":
+        deleteChainCommand = `
+        iptables -t security -F ${chainName}
+        iptables -t security -X ${chainName}`;
+        break;
+
       default:
         return false;
     }
@@ -193,11 +259,61 @@ function useCRUDIPTables() {
     }
   };
 
+  const handleChangePolicyType = async (tableType, chainName, policyType) => {
+    let changePolicyTypeCommand;
+
+    switch (tableType) {
+      case "filter":
+        changePolicyTypeCommand = `iptables -P ${chainName} ${policyType}`;
+        break;
+
+      case "nat":
+        changePolicyTypeCommand = `iptables -t nat -P ${chainName} ${policyType}`;
+        break;
+
+      case "mangle":
+        changePolicyTypeCommand = `iptables -t mangle -P ${chainName} ${policyType}`;
+        break;
+
+      case "raw":
+        changePolicyTypeCommand = `iptables -t raw -P ${chainName} ${policyType}`;
+        break;
+
+      case "security":
+        changePolicyTypeCommand = `iptables -t security -P ${chainName} ${policyType}`;
+        break;
+
+      default:
+        return false;
+    }
+
+    try {
+      const result = await window.Electron.ssh.executeCommand(
+        changePolicyTypeCommand,
+      );
+
+      if (!result.success || result.output.length > 1) {
+        toast.error(result.output.split("\n")[0]);
+        return false;
+      }
+
+      const noLoading = false;
+      await fetchRules(noLoading);
+
+      toast.success("Policy type changed successfully!");
+      return true;
+    } catch (err) {
+      toast.error(err.message);
+      return false;
+    }
+  };
+
   return {
     handleMoveRule,
     handleCreateRule,
     handleDeleteRule,
     handleDeleteChain,
+    handleChangePolicyType,
   };
 }
 

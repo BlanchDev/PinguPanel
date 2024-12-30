@@ -10,8 +10,7 @@ function SelectDirectory({ modalClose }) {
   const [loading, setLoading] = useState(false);
   const { connectionId } = useParams();
 
-  const { webAppsDirectory, setWebAppsDirectory, setMyWebAppsLoading } =
-    useWebApps();
+  const { webAppsDirectory, setWebAppsDirectory } = useWebApps();
 
   useEffect(() => {
     setNewDirectory(webAppsDirectory || "/var/www");
@@ -30,9 +29,6 @@ function SelectDirectory({ modalClose }) {
 
       if (response.success) {
         setWebAppsDirectory(newDirectory);
-        if (newDirectory) {
-          setMyWebAppsLoading(true);
-        }
         toast.success(`Directory updated successfully! : ${newDirectory}`);
         modalClose();
       } else {

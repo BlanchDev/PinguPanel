@@ -20,7 +20,7 @@ function SecurityPage() {
               <button
                 className='button blue'
                 disabled={!packages["security"]?.iptables?.installed}
-                onClick={() => navigate("iptables")}
+                onClick={() => navigate("iptables/filter-table")}
               >
                 IPTables
               </button>

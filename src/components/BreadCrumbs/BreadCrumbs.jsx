@@ -3,9 +3,30 @@ import "./BreadCrumbs.scss";
 
 function BreadCrumbs() {
   const location = useLocation();
-  const { connectionId } = useParams();
+  const { connectionId, iptablesTable } = useParams();
 
-  const pathnames = location.pathname.split("/").filter((pathItem) => pathItem);
+  const pathnames = location.pathname.split("/").filter((pathItem) => {
+    const pathItemTrimmed = pathItem.trim();
+
+    switch (pathItemTrimmed) {
+      case "":
+        return false;
+
+      case "dashboard":
+        return false;
+
+      case connectionId:
+        return false;
+
+      case iptablesTable:
+        return false;
+
+      default:
+        return true;
+    }
+  });
+
+  console.log(pathnames);
 
   const getPageTitle = (path) => {
     switch (path) {
@@ -39,11 +60,12 @@ function BreadCrumbs() {
       )}
 
       {pathnames.map((name, index) => {
-        if (name === "dashboard" || name === connectionId) {
-          return null;
+        let routeTo = `/${pathnames.slice(0, index + 1).join("/")}`;
+
+        if (connectionId) {
+          routeTo = `/dashboard/${connectionId}${routeTo}`;
         }
 
-        const routeTo = `/${pathnames.slice(0, index + 1).join("/")}`;
         const isLast = index === pathnames.length - 1;
 
         return (

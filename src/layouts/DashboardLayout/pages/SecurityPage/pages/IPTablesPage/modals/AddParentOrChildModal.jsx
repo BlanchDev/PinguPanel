@@ -66,6 +66,21 @@ function AddParentOrChildModal({ modalClose, tableType, target, chainName }) {
                     iptables -t nat -A {rule || "`RULE`"} -j {chainName}
                   </code>
                 )}
+                {tableType === "mangle" && (
+                  <code>
+                    iptables -t mangle -A {rule || "`RULE`"} -j {chainName}
+                  </code>
+                )}
+                {tableType === "raw" && (
+                  <code>
+                    iptables -t raw -A {rule || "`RULE`"} -j {chainName}
+                  </code>
+                )}
+                {tableType === "security" && (
+                  <code>
+                    iptables -t security -A {rule || "`RULE`"} -j {chainName}
+                  </code>
+                )}
               </div>
             </div>
             <div className='bottom row aic jcc'>
@@ -104,6 +119,21 @@ function AddParentOrChildModal({ modalClose, tableType, target, chainName }) {
                 {tableType === "nat" && (
                   <code>
                     iptables -t nat -A {chainName} -j {rule || "`RULE`"}
+                  </code>
+                )}
+                {tableType === "mangle" && (
+                  <code>
+                    iptables -t mangle -A {chainName} -j {rule || "`RULE`"}
+                  </code>
+                )}
+                {tableType === "raw" && (
+                  <code>
+                    iptables -t raw -A {chainName} -j {rule || "`RULE`"}
+                  </code>
+                )}
+                {tableType === "security" && (
+                  <code>
+                    iptables -t security -A {chainName} -j {rule || "`RULE`"}
                   </code>
                 )}
               </div>

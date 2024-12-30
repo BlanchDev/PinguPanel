@@ -6,6 +6,7 @@ import shieldIcon from "../../../../assets/dashboardLeftBar/shield.png";
 import logoutIcon from "../../../../assets/dashboardLeftBar/logout.png";
 import dockerIcon from "../../../../assets/dashboardLeftBar/docker.png";
 import pm2Icon from "../../../../assets/dashboardLeftBar/pm2.png";
+import backupIcon from "../../../../assets/dashboardLeftBar/backup.png";
 import "./DashboardLeftBar.scss";
 import { useMotion } from "../../../AppLayout/context/AppLayoutContext";
 import AreYouSureModal from "../../../../components/modals/AreYouSureModal/AreYouSureModal";
@@ -91,7 +92,7 @@ function DashboardLeftBar() {
         {renderButton(
           appsIcon,
           "Manage Packages",
-          `/dashboard/${connectionId}/manage-global-packages/all`,
+          `/dashboard/${connectionId}/manage-global-packages/all-packages`,
         )}
         {renderButton(
           dockerIcon,
@@ -110,7 +111,12 @@ function DashboardLeftBar() {
         )}
       </div>
 
-      <div className='bottom column aic gap10'>
+      <div className='bottom column aic'>
+        {renderButton(
+          backupIcon,
+          "Backup - Backup Manager",
+          `/dashboard/${connectionId}/backup`,
+        )}
         <button
           className='left-bar-button'
           onMouseEnter={handleMouseEnter}

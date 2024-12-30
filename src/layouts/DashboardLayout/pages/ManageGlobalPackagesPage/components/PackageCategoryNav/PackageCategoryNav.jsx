@@ -1,85 +1,44 @@
-import { useEffect, useRef } from "react";
 import "./PackageCategoryNav.scss";
-import { NavLink, useParams } from "react-router-dom";
+import { useParams } from "react-router-dom";
+import TopNavBar from "../../../../../../components/TopNavBar/TopNavBar";
 
 function PackageCategoryNav() {
-  const indicatorRef = useRef(null);
-  const { connectionId, category } = useParams();
+  const { connectionId } = useParams();
 
-  useEffect(() => {
-    resetIndicator();
-  }, [category]);
+  const buttons = [
+    {
+      text: "All",
+      type: "navlink",
+      link: `/dashboard/${connectionId}/manage-global-packages/all-packages`,
+    },
+    {
+      text: "Required",
+      type: "navlink",
+      link: `/dashboard/${connectionId}/manage-global-packages/required-packages`,
+    },
+    {
+      text: "Docker",
+      type: "navlink",
+      link: `/dashboard/${connectionId}/manage-global-packages/docker-packages`,
+    },
+    {
+      text: "PM2",
+      type: "navlink",
+      link: `/dashboard/${connectionId}/manage-global-packages/pm2-packages`,
+    },
+    {
+      text: "SSL",
+      type: "navlink",
+      link: `/dashboard/${connectionId}/manage-global-packages/ssl-packages`,
+    },
+    {
+      text: "Security",
+      type: "navlink",
+      link: `/dashboard/${connectionId}/manage-global-packages/security-packages`,
+    },
+  ];
 
-  const moveIndicator = (e) => {
-    indicatorRef.current.style.left = `${e.target?.offsetLeft}px`;
-    indicatorRef.current.style.width = `${e.target?.offsetWidth}px`;
-
-    if (e.target.classList.contains("active")) {
-      indicatorRef.current.style.borderBottom = `1px solid #6658ff`;
-    } else {
-      indicatorRef.current.style.borderBottom = `1px solid whitesmoke`;
-    }
-  };
-
-  const resetIndicator = () => {
-    const tabButton = document.querySelector(".tab-button.active");
-    indicatorRef.current.style.left = `${tabButton?.offsetLeft}px`;
-    indicatorRef.current.style.width = `${tabButton?.offsetWidth}px`;
-  };
-
-  return (
-    <div className='package-category-nav row aic'>
-      <div className='indicator' ref={indicatorRef} />
-      <NavLink
-        className='tab-button'
-        onMouseEnter={moveIndicator}
-        onMouseLeave={resetIndicator}
-        to={`/dashboard/${connectionId}/manage-global-packages/all`}
-      >
-        All
-      </NavLink>
-      <NavLink
-        className='tab-button'
-        onMouseEnter={moveIndicator}
-        onMouseLeave={resetIndicator}
-        to={`/dashboard/${connectionId}/manage-global-packages/required`}
-      >
-        Required
-      </NavLink>
-      <NavLink
-        className='tab-button'
-        onMouseEnter={moveIndicator}
-        onMouseLeave={resetIndicator}
-        to={`/dashboard/${connectionId}/manage-global-packages/docker`}
-      >
-        Docker
-      </NavLink>
-      <NavLink
-        className='tab-button'
-        onMouseEnter={moveIndicator}
-        onMouseLeave={resetIndicator}
-        to={`/dashboard/${connectionId}/manage-global-packages/pm2`}
-      >
-        PM2
-      </NavLink>
-      <NavLink
-        className='tab-button'
-        onMouseEnter={moveIndicator}
-        onMouseLeave={resetIndicator}
-        to={`/dashboard/${connectionId}/manage-global-packages/ssl`}
-      >
-        SSL
-      </NavLink>
-      <NavLink
-        className='tab-button'
-        onMouseEnter={moveIndicator}
-        onMouseLeave={resetIndicator}
-        to={`/dashboard/${connectionId}/manage-global-packages/security`}
-      >
-        Security
-      </NavLink>
-    </div>
-  );
+  return <TopNavBar buttons={buttons} direction='row' />;
 }
 
 export default PackageCategoryNav;

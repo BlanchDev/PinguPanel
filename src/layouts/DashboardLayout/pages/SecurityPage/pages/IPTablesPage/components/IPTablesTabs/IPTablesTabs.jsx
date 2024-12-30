@@ -1,33 +1,14 @@
-import PropTypes from "prop-types";
-import { useEffect, useRef, useState } from "react";
+import { useState } from "react";
 import "./IPTablesTabs.scss";
 import { toast } from "react-toastify";
 import FreshStartModal from "./modals/FreshStartModal";
+import TopNavBar from "../../../../../../../../components/TopNavBar/TopNavBar";
+import { useParams } from "react-router-dom";
 
-function IPTablesTabs({ currentTab, setActiveTab }) {
+function IPTablesTabs() {
   const [freshStartModal, setFreshStartModal] = useState(false);
-  const indicatorRef = useRef(null);
 
-  useEffect(() => {
-    resetIndicator();
-  }, [currentTab]);
-
-  const moveIndicator = (e) => {
-    indicatorRef.current.style.left = `${e.target?.offsetLeft}px`;
-    indicatorRef.current.style.width = `${e.target?.offsetWidth}px`;
-
-    if (e.target.classList.contains("active")) {
-      indicatorRef.current.style.borderBottom = `1px solid #6658ff`;
-    } else {
-      indicatorRef.current.style.borderBottom = `1px solid whitesmoke`;
-    }
-  };
-
-  const resetIndicator = () => {
-    const tabButton = document.querySelector(".tab-button.active");
-    indicatorRef.current.style.left = `${tabButton?.offsetLeft}px`;
-    indicatorRef.current.style.width = `${tabButton?.offsetWidth}px`;
-  };
+  const { connectionId } = useParams();
 
   const handleSave = async () => {
     try {
@@ -44,46 +25,53 @@ function IPTablesTabs({ currentTab, setActiveTab }) {
     }
   };
 
+  const buttons = [
+    {
+      text: "Filter",
+      type: "navlink",
+      link: `/dashboard/${connectionId}/security/iptables/filter-table`,
+    },
+    {
+      text: "NAT",
+      type: "navlink",
+      link: `/dashboard/${connectionId}/security/iptables/nat-table`,
+    },
+    {
+      text: "Mangle",
+      type: "navlink",
+      link: `/dashboard/${connectionId}/security/iptables/mangle-table`,
+    },
+    {
+      text: "Raw",
+      type: "navlink",
+      link: `/dashboard/${connectionId}/security/iptables/raw-table`,
+    },
+    {
+      text: "Security",
+      type: "navlink",
+      link: `/dashboard/${connectionId}/security/iptables/security-table`,
+    },
+  ];
+
   return (
-    <div className='iptables-tabs row aic jcsb'>
-      <div className='indicator' ref={indicatorRef} />
-      <div className='row aic'>
-        <button
-          className={`tab-button ${currentTab === "filter" ? "active" : ""}`}
-          onMouseEnter={moveIndicator}
-          onMouseLeave={resetIndicator}
-          onClick={() => setActiveTab("filter")}
-        >
-          Filter Table
-        </button>
-        <button
-          className={`tab-button ${currentTab === "nat" ? "active" : ""}`}
-          onMouseEnter={moveIndicator}
-          onMouseLeave={resetIndicator}
-          onClick={() => setActiveTab("nat")}
-        >
-          NAT Table
-        </button>
-      </div>
+    <TopNavBar buttons={buttons} direction='row' styleTop='40px'>
       <div className='right-container row aic gap10'>
         <button className='button green' onClick={handleSave}>
-          Save
+          Save Now
         </button>
         {/* TODO: Docker varsa resetlerken hangi kodları çalıştıracağımızı belirt. Seçim yaptır. nat kuralları silinsin mi silinmesin mi? */}
-        <button className='button red' onClick={() => setFreshStartModal(true)}>
+        <button
+          className='button orange'
+          onClick={() => setFreshStartModal(true)}
+        >
           Fresh Start
         </button>
       </div>
       {freshStartModal && (
         <FreshStartModal modalClose={() => setFreshStartModal(false)} />
       )}
-    </div>
+    </TopNavBar>
   );
 }
-
-IPTablesTabs.propTypes = {
-  currentTab: PropTypes.string.isRequired,
-  setActiveTab: PropTypes.func.isRequired,
-};
 
 export default IPTablesTabs;

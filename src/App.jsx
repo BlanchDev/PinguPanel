@@ -12,6 +12,7 @@ import SystemInfoPage from "./layouts/DashboardLayout/pages/DashboardHomePage/pa
 import ManageGlobalPackagesPage from "./layouts/DashboardLayout/pages/ManageGlobalPackagesPage/ManageGlobalPackagesPage";
 import SecurityPage from "./layouts/DashboardLayout/pages/SecurityPage/SecurityPage";
 import IPTablesPage from "./layouts/DashboardLayout/pages/SecurityPage/pages/IPTablesPage/IPTablesPage";
+import PM2Page from "./layouts/DashboardLayout/pages/PM2Page/PM2Page";
 
 //TODO: MYSQL sayfasında otomatik template yap. Örneğin users tablosu için user_id, username, password, email, created_at, updated_at gibi kolonlar oluştur. Bu template seçildiğinde otomatik olarak kolonları oluştursun. Hatta düzenlemek istiyor musun diye sorsun.
 
@@ -42,13 +43,19 @@ function App() {
 
             {/* MANAGE GLOBAL PACKAGES */}
             <Route
-              path='manage-global-packages/:category'
+              path='manage-global-packages/:packageCategory'
               element={<ManageGlobalPackagesPage />}
             />
 
+            {/* PM2 */}
+            <Route path='pm2' element={<PM2Page />} />
+
             {/* SECURITY */}
             <Route path='security' element={<SecurityPage />} />
-            <Route path='security/iptables' element={<IPTablesPage />} />
+            <Route
+              path='security/iptables/:iptablesTable'
+              element={<IPTablesPage />}
+            />
           </Route>
 
           {/* REDIRECTS */}
