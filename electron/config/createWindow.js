@@ -13,7 +13,7 @@ export function createSplashWindow() {
     frame: false,
     alwaysOnTop: true,
     center: true,
-    icon: join(getPath(), "../assets/icon.ico"),
+    icon: join(getPath(), "/assets/icon.ico"),
     show: true,
     skipTaskbar: true,
 
@@ -34,7 +34,7 @@ export function createWindow() {
     minWidth: 1024,
     minHeight: 576,
     center: true,
-    icon: join(getPath(), "../assets/icon.ico"),
+    icon: join(getPath(), "/assets/icon.ico"),
     show: false,
     webPreferences: {
       sandbox: true,
