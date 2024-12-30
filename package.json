@@ -41,7 +41,7 @@
           "target": "nsis"
         }
       ],
-      "icon": "assets/icon.ico"
+      "icon": "/electron/assets/icon.ico"
     },
     "nsis": {
       "oneClick": false,
