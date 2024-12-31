@@ -1,9 +1,11 @@
 import "./PM2Page.scss";
 import WebApps from "../DashboardHomePage/components/WebApps/WebApps";
 import { usePackageManager } from "../../context/DashboardLayoutContext";
+import { Link, useParams } from "react-router-dom";
 
 function PM2Page() {
   const { packages } = usePackageManager();
+  const { connectionId } = useParams();
 
   const renderWebApps = () => {
     if (packages.error) {
@@ -12,6 +14,25 @@ function PM2Page() {
           <legend className='title yellow-title'>Web Apps</legend>
           <div className='content column aic jcc'>
             <p>System requirements check failed: {packages.error}</p>
+          </div>
+        </fieldset>
+      );
+    }
+
+    if (
+      !Object.values(packages?.required || {}).every((pkg) => pkg.installed)
+    ) {
+      return (
+        <fieldset className='box column gap10'>
+          <legend className='title yellow-title'>Web Apps</legend>
+          <div className='content column aic jcc gap25'>
+            <p>System requirements not installed!</p>
+            <Link
+              className='button purple'
+              to={`/dashboard/${connectionId}/manage-global-packages/required-packages`}
+            >
+              Install Requirements
+            </Link>
           </div>
         </fieldset>
       );
@@ -28,7 +49,7 @@ function PM2Page() {
           <legend className='title yellow-title'>Web Apps</legend>
           <div className='content column aic jcc gap25'>
             <div className='loading-spinner' />
-            <p>Checking system requirements...</p>
+            <p>Checking PM2 Packages...</p>
           </div>
         </fieldset>
       );
@@ -43,7 +64,13 @@ function PM2Page() {
         <fieldset className='box column gap10'>
           <legend className='title yellow-title'>Web Apps</legend>
           <div className='content column aic jcc gap25'>
-            <p>System requirements not installed!</p>
+            <p>PM2 Packages not installed!</p>
+            <Link
+              className='button purple'
+              to={`/dashboard/${connectionId}/manage-global-packages/pm2-packages`}
+            >
+              Install PM2 Packages
+            </Link>
           </div>
         </fieldset>
       );

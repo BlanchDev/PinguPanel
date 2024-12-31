@@ -7,6 +7,7 @@ import { PackageManagerProvider } from "./context/PackageManagerProvider";
 import { WebAppsProvider } from "./context/WebAppsProvider";
 import "./DashboardLayout.scss";
 import IPTablesProvider from "./pages/SecurityPage/pages/IPTablesPage/context/IPTablesProvider";
+import DashboardLoadingScreen from "./components/DashboardLoadingScreen/DashboardLoadingScreen";
 
 function DashboardLayout() {
   const { isLoginAnimation, setIsLoginAnimation, isLogoutAnimation } =
@@ -38,14 +39,16 @@ function DashboardLayout() {
   return (
     <ConnectionProvider>
       <PackageManagerProvider>
-        <WebAppsProvider>
-          <IPTablesProvider>
-            <motion.div className='dashboard-layout row' {...animation()}>
-              <DashboardLeftBar />
-              <Outlet />
-            </motion.div>
-          </IPTablesProvider>
-        </WebAppsProvider>
+        <IPTablesProvider>
+          <WebAppsProvider>
+            <DashboardLoadingScreen>
+              <motion.div className='dashboard-layout row' {...animation()}>
+                <DashboardLeftBar />
+                <Outlet />
+              </motion.div>
+            </DashboardLoadingScreen>
+          </WebAppsProvider>
+        </IPTablesProvider>
       </PackageManagerProvider>
     </ConnectionProvider>
   );

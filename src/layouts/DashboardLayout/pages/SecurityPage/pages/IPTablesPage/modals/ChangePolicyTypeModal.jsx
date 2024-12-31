@@ -55,7 +55,7 @@ function ChangePolicyTypeModal({ modalClose, tableType, policyName }) {
         </div>
         <div className='bottom row aic jcc'>
           <button className='button green' type='submit' disabled={loading}>
-            {loading ? "Creating..." : "Create"}
+            {loading ? "Changing..." : "Change"}
           </button>
         </div>
       </form>
