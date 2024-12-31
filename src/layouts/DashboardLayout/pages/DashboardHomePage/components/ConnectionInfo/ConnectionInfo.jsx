@@ -1,8 +1,10 @@
-import { Link } from "react-router-dom";
+import { Link, useLocation } from "react-router-dom";
 import { useConnection } from "../../../../context/DashboardLayoutContext";
 
 function ConnectionInfo() {
   const { myConn } = useConnection();
+
+  const { pathname } = useLocation();
 
   return (
     <fieldset className='box column gap10'>
@@ -14,7 +16,13 @@ function ConnectionInfo() {
         </fieldset>
       </div>
       <div className='row aic gap15'>
-        <Link to='system-info' className='button blue'>
+        <Link
+          to='system-info'
+          className='button blue'
+          onClick={() => {
+            console.log(pathname);
+          }}
+        >
           System Info
         </Link>
       </div>

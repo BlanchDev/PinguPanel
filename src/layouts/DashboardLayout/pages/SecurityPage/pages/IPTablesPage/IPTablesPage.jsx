@@ -7,7 +7,7 @@ import { useParams } from "react-router-dom";
 
 function IPTablesPage() {
   const {
-    isLoading,
+    isIPTablesLoading,
     filterRules,
     natRules,
     mangleRules,
@@ -17,7 +17,7 @@ function IPTablesPage() {
 
   const { iptablesTable } = useParams();
 
-  if (isLoading) {
+  if (isIPTablesLoading) {
     return (
       <div className='dashboard-layout-page'>
         <div className='box-container noborder column aic jcc gap10 w100 h100'>

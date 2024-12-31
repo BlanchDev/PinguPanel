@@ -1,5 +1,5 @@
 import { useEffect } from "react";
-import { useNavigate } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import { toast } from "react-toastify";
 import "./DashboardHomePage.scss";
 import ConnectionInfo from "./components/ConnectionInfo/ConnectionInfo";
@@ -57,10 +57,20 @@ function DashboardHomePage() {
           <fieldset className='box column gap10'>
             <legend className='title yellow-title'>Configuration</legend>
             <div className='content column gap10'>
-              <fieldset>
-                <legend>Fast Actions</legend>
-                <button className='button blue'>sshd_config</button>
-              </fieldset>
+              <div className='column gap10'>
+                <h4 className=' yellow-title'>Fast Actions</h4>
+                <div className='row aic gap20'>
+                  <Link to='users' className='button blue'>
+                    Users
+                  </Link>
+                  <Link to='sshd-config' className='button blue'>
+                    /sshd_config
+                  </Link>
+                  <Link to='nginx-config' className='button blue'>
+                    nginx config
+                  </Link>
+                </div>
+              </div>
             </div>
           </fieldset>
         </div>

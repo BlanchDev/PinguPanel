@@ -1,0 +1,21 @@
+.sshd-config-page {
+  textarea {
+    width: calc(100% - 24px);
+    height: calc(100% - 24px);
+    padding: 12px;
+    font-family: "Cascadia Code", monospace;
+    font-size: 0.8em;
+    line-height: 1.5;
+    border-radius: 4px;
+    border: 1px solid #092653;
+    resize: none;
+    outline: none;
+    transition: all 0.2s ease-in-out;
+    background-color: #092653;
+
+    &:focus {
+      border: 1px solid #007bff;
+      background-color: #102341;
+    }
+  }
+}

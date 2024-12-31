@@ -3,7 +3,7 @@ import "./IndicatorNav.scss";
 import PropTypes from "prop-types";
 import { NavLink, useNavigate } from "react-router-dom";
 
-function IndicatorNav({ buttons, direction = "row" }) {
+function IndicatorNav({ buttons }) {
   const [activeTab, setActiveTab] = useState("");
 
   const indicatorRef = useRef(null);
@@ -31,7 +31,7 @@ function IndicatorNav({ buttons, direction = "row" }) {
   };
 
   return (
-    <div className={`indicator-nav ${direction} aic`}>
+    <div className={`indicator-nav row aic`}>
       <div className='indicator' ref={indicatorRef} />
       {buttons.map((button, index) => {
         if (button.type === "navlink") {
@@ -70,8 +70,13 @@ function IndicatorNav({ buttons, direction = "row" }) {
 }
 
 IndicatorNav.propTypes = {
-  buttons: PropTypes.arrayOf(PropTypes.string).isRequired,
-  direction: PropTypes.string,
+  buttons: PropTypes.arrayOf(
+    PropTypes.shape({
+      type: PropTypes.oneOf(["navlink", "button"]).isRequired,
+      text: PropTypes.string.isRequired,
+      link: PropTypes.string.isRequired,
+    }),
+  ).isRequired,
 };
 
 export default IndicatorNav;

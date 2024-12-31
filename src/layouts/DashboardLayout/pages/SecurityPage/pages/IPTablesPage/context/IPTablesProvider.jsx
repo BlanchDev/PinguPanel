@@ -41,7 +41,7 @@ function IPTablesProvider({ children }) {
     references: [],
     details: [],
   });
-  const [isLoading, setIsLoading] = useState(false);
+  const [isIPTablesLoading, setIsIPTablesLoading] = useState(false);
 
   const { packages } = usePackageManager();
 
@@ -227,7 +227,7 @@ function IPTablesProvider({ children }) {
 
   const fetchRules = useCallback(
     async (loading = true) => {
-      setIsLoading(loading);
+      setIsIPTablesLoading(loading);
 
       try {
         // Filter Table
@@ -412,21 +412,15 @@ function IPTablesProvider({ children }) {
       } catch (error) {
         console.error("Error fetching rules:", error);
       } finally {
-        setIsLoading(false);
+        setIsIPTablesLoading(false);
       }
     },
     [getAllChainsAsJson],
   );
 
   useEffect(() => {
-    if (
-      !packages["security"].iptables.loading &&
-      packages["security"].iptables.installed &&
-      location.pathname === `/dashboard/${params.connectionId}/security`
-    ) {
-      fetchRules();
-    }
-  }, [fetchRules, packages, location.pathname, params]);
+    fetchRules();
+  }, [fetchRules]);
 
   useEffect(() => {
     if (
@@ -447,8 +441,8 @@ function IPTablesProvider({ children }) {
       mangleRules,
       rawRules,
       securityRules,
-      isLoading,
-      setIsLoading,
+      isIPTablesLoading,
+      setIsIPTablesLoading,
       fetchRules,
     }),
     [
@@ -458,7 +452,7 @@ function IPTablesProvider({ children }) {
       mangleRules,
       rawRules,
       securityRules,
-      isLoading,
+      isIPTablesLoading,
       fetchRules,
     ],
   );

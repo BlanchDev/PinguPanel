@@ -26,18 +26,18 @@ function BreadCrumbs() {
     }
   });
 
-  console.log(pathnames);
-
   const getPageTitle = (path) => {
     switch (path) {
       case "save-new-connection":
         return "Save New SSH Connection";
 
+      /*DASHBOARD*/
       case "dashboard-home":
         return "Dashboard Home";
-
       case "system-info":
         return "System Info";
+      case "sshd-config":
+        return "sshd_config";
 
       case "security":
         return "Security";

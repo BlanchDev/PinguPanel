@@ -7,7 +7,6 @@ export function PackageManagerProvider({ children }) {
   const [distro, setDistro] = useState(null);
   const [packages, setPackages] = useState({
     error: null,
-    isReqsInstalled: false,
     isInstallationBusy: false,
     required: {
       "apt-transport-https": { loading: true },
@@ -18,6 +17,8 @@ export function PackageManagerProvider({ children }) {
       "software-properties-common": { loading: true },
     },
     docker: {
+      GPG: { loading: true },
+      repository: { loading: true },
       "docker-ce": { loading: true },
       "docker-ce-cli": { loading: true },
       "containerd.io": { loading: true },
@@ -160,6 +161,7 @@ export function PackageManagerProvider({ children }) {
                 },
               },
             }));
+            return true;
           } catch {
             setPackages((currentPackages) => ({
               ...currentPackages,
@@ -175,6 +177,7 @@ export function PackageManagerProvider({ children }) {
                 },
               },
             }));
+            return false;
           }
         }),
       );
@@ -184,6 +187,7 @@ export function PackageManagerProvider({ children }) {
 
   const checkPackages = useCallback(async () => {
     try {
+      await delay(500);
       await checkCategory("required");
       await delay(250);
       await checkCategory("docker");
@@ -193,6 +197,7 @@ export function PackageManagerProvider({ children }) {
       await checkCategory("ssl");
       await delay(250);
       await checkCategory("security");
+      await delay(500);
     } catch (error) {
       console.error("Error checking packages:", error);
     }
