@@ -37,13 +37,15 @@ export function createWindow() {
     icon: join(getPath(), "/assets/icon.ico"),
     show: false,
     webPreferences: {
-      sandbox: true,
       nodeIntegration: false,
       contextIsolation: true,
+      sandbox: true,
+      webSecurity: true,
       worldSafeExecuteJavaScript: true,
       enableRemoteModule: false,
       preload: join(getPath(), "preload.cjs"),
       devTools: process.env.NODE_ENV === "development",
+      spellcheck: false,
     },
     frame: false,
     titleBarStyle: "hidden",
@@ -52,6 +54,8 @@ export function createWindow() {
       symbolColor: "#f5db41",
       height: 30,
     },
+    paintWhenInitiallyHidden: true,
+    backgroundColor: "#000000",
   });
 
   // CSP ayarları
